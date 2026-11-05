@@ -28,16 +28,22 @@ apk add libxml2-utils
 
 Lo que **no** necesitas (a diferencia de la versión PHP):
 
-- `ext-xsl` o Saxon para la cadena original: el procesamiento XSLT está implementado en Go y los
-  archivos XSLT del SAT vienen incluidos.
+- `ext-xsl` o Saxon para la cadena original: el procesamiento XSLT está implementado en Go.
 - OpenSSL o convertir la llave `.key` a PEM: se lee directamente el archivo del SAT.
 - `ext-soap` para consultar el estado del CFDI.
 
-## Caché de recursos
+## Recursos del SAT
 
-Los recursos descargados del SAT se guardan en el directorio de caché del usuario
-(`xmlresolver.DefaultLocalPath()`). Consulta [xmlresolver](componentes/xmlresolver.md) para
-cambiar su ubicación.
+Los XSLT de la cadena original y los esquemas XSD se descargan del SAT la primera vez que se
+necesitan. Se guardan en `satresources.DefaultDir()`, dentro del directorio de caché del usuario,
+y cada mes se revisa si el SAT publicó cambios. Los certificados del SAT para validar el timbre se
+guardan aparte, en `xmlresolver.DefaultLocalPath()`.
+
+Consulta [recursos del SAT](componentes/recursos-sat.md) para:
+
+- cambiar el directorio;
+- forzar la actualización o borrar la caché;
+- usar la librería en servidores sin internet.
 
 ## Imagen de contenedor
 
@@ -45,10 +51,20 @@ cambiar su ubicación.
 FROM golang:1.24-alpine AS build
 WORKDIR /src
 COPY . .
-RUN go build -o /app ./cmd/miapp
+RUN go build -o /app ./cmd/miapp \
+ && go install github.com/codigoaxaca/go-cfdi-utils/cmd/cfdi-sat-resources@latest
 
 FROM alpine:3.20
 RUN apk add --no-cache libxml2-utils ca-certificates
 COPY --from=build /app /app
+COPY --from=build /go/bin/cfdi-sat-resources /usr/local/bin/
+# recursos del SAT descargados al construir la imagen; la aplicación los sigue actualizando
+RUN cfdi-sat-resources -dir /var/cache/sat prepare
 ENTRYPOINT ["/app"]
+```
+
+En la aplicación:
+
+```go
+satresources.SetDefault(satresources.New(satresources.Config{Dir: "/var/cache/sat"}))
 ```

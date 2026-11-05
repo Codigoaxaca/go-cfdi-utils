@@ -3,7 +3,7 @@
 import pathlib, tempfile, re, subprocess, urllib.parse, xml.etree.ElementTree as ET
 pkg = pathlib.Path(__file__).resolve().parents[1]
 repo = pkg.parent
-resources = pkg / 'resources'
+resources = repo / 'satresources/embedded/data/files'
 locations = {
 '4.0': 'www.sat.gob.mx/sitio_internet/cfd/4/cadenaoriginal_4_0/cadenaoriginal_4_0.xslt',
 '3.3': 'www.sat.gob.mx/sitio_internet/cfd/3/cadenaoriginal_3_3/cadenaoriginal_3_3.xslt',

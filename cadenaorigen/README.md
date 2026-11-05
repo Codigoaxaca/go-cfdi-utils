@@ -6,27 +6,24 @@ Documentación de uso: [docs/componentes/cadena-de-origen.md](../docs/componente
   `BuildTFD(xml)` recibe un TFD 1.1 con su propio espacio de nombres declarado.
   `LocationFor(xml)` devuelve la URL oficial del XSLT. Los documentos no soportados devuelven
   un error que envuelve `ErrUnsupportedDocument`.
-- `NewBuilder(WithFS(fsys), WithHTTPClient(client))` permite recursos propios. `WithFS` resuelve
-  `host/ruta` antes que los recursos embebidos; HTTP está desactivado salvo que se indique un
-  cliente. Las URL http y https comparten la misma llave. Un builder se puede usar de forma
-  concurrente y su valor cero también funciona. Los recursos compilados se conservan durante la
-  vida del builder; crea otro para refrescarlos.
+- Las hojas de estilo vienen del almacén `satresources` (por omisión `satresources.Default()`,
+  o el de `WithStore`). `WithFS(fsys)` usa solo archivos propios `host/ruta`, sin descargas.
+- `XsltBuilder` compila cada XSLT una vez por versión del almacén: cuando se activa una versión
+  nueva, la siguiente cadena se genera con ella. Es seguro para uso concurrente y su valor cero
+  funciona.
 
-## Recursos
+## Intérprete
 
-Se embeben 54 archivos XSLT: los cuatro puntos de entrada y sus `xsl:include` recursivos
-(utilerías, complementos de CFDI como Pagos 1.0/2.0, Carta Porte 2.0/3.0/3.1, Nómina, Comercio
-Exterior, etc., y complementos de Retenciones). Para actualizarlos ejecuta
-`scripts/update-xslt.sh` (requiere Python 3).
-
-## Subconjunto de XSLT soportado
-
-Es un intérprete del subconjunto que usa el SAT, no un procesador XSLT general.
+El intérprete está en `internal/xslt`, porque `satresources` también lo usa para verificar una
+versión nueva antes de activarla. Interpreta el subconjunto de XSLT que usa el SAT; no es un
+procesador XSLT general.
 
 - Instrucciones: `stylesheet`/`transform`, `output`, `include`, `template`, `param`,
   `apply-templates`, `for-each`, `call-template`, `with-param`, `if`, `value-of`, `text`.
-- XPath: rutas de hijos, atributos y descendientes, comodines, variables, comparaciones de
-  atributos y `normalize-space(string(...))`.
+- XPath: rutas de hijos, atributos y descendientes, comodín de elementos, variables,
+  comparaciones de igualdad con literales y `normalize-space(string(...))`.
+- `Compile` revisa de forma estática todas las plantillas: cualquier instrucción, atributo,
+  patrón o expresión fuera del subconjunto es un error de compilación, no una cadena incorrecta.
 - Los `include` se expanden en orden de documento; una URL repetida se carga una vez y gana la
   última plantilla que coincide.
 - Los prefijos se resuelven en el ámbito de espacios de nombres de cada instrucción.
@@ -38,9 +35,13 @@ Es un intérprete del subconjunto que usa el SAT, no un procesador XSLT general.
 
 ## Pruebas
 
+Las pruebas usan el respaldo incluido (`satresources/embedded`) con un almacén sin conexión
+(`internal/testresources`), así que no requieren red. `go generate ./satresources/embedded`
+actualiza el respaldo desde el SAT.
+
 `python3 cadenaorigen/testdata/generate_goldens.py` regenera los resultados esperados con
-`/usr/bin/xsltproc` usando copias locales de los XSLT. Las pruebas comparan todos los CFDI de
-`testdata/`, Retenciones 2.0, los TFD extraídos de CFDI reales y casos construidos (complementos,
-codificación, espacios). La referencia PHP `cfdi33-valid` usa el certificado
+`/usr/bin/xsltproc` usando copias locales de los XSLT del respaldo. Las pruebas comparan todos
+los CFDI de `testdata/`, Retenciones 2.0, los TFD extraídos de CFDI reales y casos construidos
+(complementos, codificación, espacios). La referencia PHP `cfdi33-valid` usa el certificado
 30001000000500003416 mientras que el XML de prueba tiene 30001000000400002434; la comparación
 contra PHP ajusta solo una copia en memoria de ese atributo.

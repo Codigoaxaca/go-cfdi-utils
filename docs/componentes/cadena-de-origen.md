@@ -16,12 +16,17 @@ el paquete `cadenaorigen` incluye:
 - Un intérprete en Go puro del subconjunto de XSLT que usan los archivos del SAT
   (`template`, `apply-templates`, `for-each`, `call-template`, `if`, `value-of`,
   `normalize-space`, reglas predeterminadas, etc.).
-- Los archivos XSLT del SAT embebidos en el binario (`//go:embed`): CFDI 4.0, CFDI 3.3,
-  Timbre Fiscal Digital 1.1, Retenciones 2.0 y todos sus complementos (Pagos, Carta Porte,
-  Nómina, Comercio Exterior, etc.).
 
-No requiere `xsltproc`, Saxon, cgo ni acceso a internet. Las pruebas comparan el resultado contra
-`xsltproc` y contra la versión PHP.
+Los archivos XSLT del SAT (CFDI 4.0, CFDI 3.3, Timbre Fiscal Digital 1.1, Retenciones 2.0 y todos
+sus complementos: Pagos, Carta Porte, Nómina, Comercio Exterior, etc.) **no van dentro del
+binario**. Los administra el paquete [`satresources`](recursos-sat.md), que:
+
+- los descarga del SAT la primera vez y los guarda en disco;
+- revisa cada mes si el SAT publicó cambios;
+- verifica cada versión nueva antes de usarla.
+
+No requiere `xsltproc`, Saxon ni cgo. Las pruebas comparan el resultado contra `xsltproc` y
+contra la versión PHP.
 
 ```go
 import "github.com/codigoaxaca/go-cfdi-utils/cadenaorigen"
@@ -72,26 +77,32 @@ cadenaTfd, err := cadenaorigen.BuildTFD([]byte(cfdi40validators.TfdXML(tfd)))
 `BuildTFD` requiere que el XML del timbre declare su espacio de nombres (`xmlns:tfd`); la
 función `cfdi40validators.TfdXML` lo agrega si el nodo lo hereda del comprobante.
 
-## Recursos propios o actualizados
+## De dónde salen los XSLT
 
-Cuando el SAT publique cambios en sus XSLT puedes:
-
-- Actualizar los archivos incluidos con `scripts/update-xslt.sh` (descarga todos los XSLT
-  siguiendo sus `xsl:include`) y volver a compilar.
-- Usar tus propios archivos sin recompilar la librería:
+Por omisión se usan los de `satresources.Default()`. Cuando el almacén activa una versión nueva
+de los recursos, la siguiente cadena se genera con ella sin reiniciar la aplicación: el `Builder`
+compila cada XSLT una vez por versión y se puede usar de forma concurrente.
 
 ```go
-builder := cadenaorigen.NewBuilder(
+// un almacén distinto del predeterminado
+builder := cadenaorigen.NewBuilder(cadenaorigen.WithStore(store))
+
+// archivos propios fijos, sin descargas ni actualizaciones
+builder = cadenaorigen.NewBuilder(
 	cadenaorigen.WithFS(os.DirFS("/srv/sat-xslt")), // <dir>/www.sat.gob.mx/sitio_internet/...
-	cadenaorigen.WithHTTPClient(http.DefaultClient),  // descargar los que no existan
 )
 creator := cfdi40.NewCreator(attrs, cfdi40.WithCadenaOrigenBuilder(builder))
 ```
 
-`WithFS` busca primero `<host>/<ruta>` en el sistema de archivos dado y después en los archivos
-incluidos. Las descargas por HTTP están desactivadas a menos que se indique un cliente.
+Para forzar la actualización, ver el estado o usar la librería sin internet, consulta
+[recursos del SAT](recursos-sat.md).
 
-El `Builder` compila cada XSLT una sola vez y se puede usar de forma concurrente.
+### Revisión estricta
+
+El intérprete revisa todas las plantillas al compilar. Si una hoja de estilo usa algo que no sabe
+interpretar (otra instrucción, un predicado `[...]`, una función de XPath, un modo, etc.),
+devuelve un error en lugar de generar en silencio una cadena incorrecta. Por eso una versión
+nueva del SAT con algo así no se activa: se sigue usando la anterior hasta actualizar la librería.
 
 ## Interfaz `Builder`
 

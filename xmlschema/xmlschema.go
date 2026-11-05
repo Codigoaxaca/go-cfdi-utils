@@ -4,8 +4,9 @@
 // Go no cuenta con un validador de XML Schema en su biblioteca estándar, por
 // lo que esta implementación usa la herramienta xmllint (libxml2), disponible
 // por omisión en macOS y en la mayoría de distribuciones Linux (paquete
-// libxml2-utils en Debian/Ubuntu). Los esquemas se descargan una sola vez y se
-// guardan en la caché del xmlresolver.Resolver.
+// libxml2-utils en Debian/Ubuntu). Los esquemas los obtiene el almacén
+// satresources, que los guarda en disco y revisa periódicamente si el SAT
+// publicó cambios.
 package xmlschema
 
 import (
@@ -19,7 +20,7 @@ import (
 	"strings"
 
 	"github.com/codigoaxaca/go-cfdi-utils/nodes"
-	"github.com/codigoaxaca/go-cfdi-utils/xmlresolver"
+	"github.com/codigoaxaca/go-cfdi-utils/satresources"
 )
 
 // ErrXmllintNotFound se devuelve cuando no se encuentra xmllint.
@@ -27,22 +28,20 @@ var ErrXmllintNotFound = errors.New("xmlschema: no se encontró el ejecutable xm
 
 // XmllintValidator valida esquemas usando xmllint.
 type XmllintValidator struct {
-	// Resolver descarga y guarda en caché los esquemas.
-	Resolver *xmlresolver.Resolver
+	// Resources obtiene los esquemas. Si es nil se usa satresources.Default().
+	Resources *satresources.Store
 	// Executable es la ruta de xmllint.
 	Executable string
 }
 
-// NewXmllint busca xmllint en el PATH y crea el validador.
-func NewXmllint(resolver *xmlresolver.Resolver) (*XmllintValidator, error) {
+// NewXmllint busca xmllint en el PATH y crea el validador. Si store es nil
+// se usa satresources.Default() al validar.
+func NewXmllint(store *satresources.Store) (*XmllintValidator, error) {
 	path, err := exec.LookPath("xmllint")
 	if err != nil {
 		return nil, ErrXmllintNotFound
 	}
-	if resolver == nil {
-		resolver = xmlresolver.New()
-	}
-	return &XmllintValidator{Resolver: resolver, Executable: path}, nil
+	return &XmllintValidator{Resources: store, Executable: path}, nil
 }
 
 // SchemaLocations obtiene todos los pares espacio de nombres / ubicación
@@ -64,7 +63,15 @@ func SchemaLocations(root *nodes.Node) []nodes.SchemaLocation {
 }
 
 // ValidateSchemas valida el XML contra sus esquemas. Devuelve nil si es válido.
+//
+// Solo se usan los esquemas publicados en servidores permitidos por el
+// almacén (por omisión sat.gob.mx); las ubicaciones de otros servidores, como
+// las de algunas addendas, se ignoran.
 func (v *XmllintValidator) ValidateSchemas(ctx context.Context, xml []byte) error {
+	store := v.Resources
+	if store == nil {
+		store = satresources.Default()
+	}
 	root, err := nodes.ParseXML(xml)
 	if err != nil {
 		return err
@@ -74,6 +81,7 @@ func (v *XmllintValidator) ValidateSchemas(ctx context.Context, xml []byte) erro
 		return errors.New("xmlschema: el documento no declara esquemas en xsi:schemaLocation")
 	}
 
+	imported := 0
 	var wrapper strings.Builder
 	wrapper.WriteString(`<?xml version="1.0" encoding="UTF-8"?>` + "\n")
 	wrapper.WriteString(`<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">` + "\n")
@@ -81,10 +89,14 @@ func (v *XmllintValidator) ValidateSchemas(ctx context.Context, xml []byte) erro
 		if !strings.HasPrefix(l.Location, "http://") && !strings.HasPrefix(l.Location, "https://") {
 			return fmt.Errorf("xmlschema: la ubicación del esquema %q no es una URL", l.Location)
 		}
-		local, err := v.Resolver.ResolveSchema(ctx, l.Location)
+		if !store.Allowed(l.Location) {
+			continue
+		}
+		local, err := store.Path(ctx, l.Location)
 		if err != nil {
 			return err
 		}
+		imported++
 		abs, err := filepath.Abs(local)
 		if err != nil {
 			return err
@@ -92,6 +104,9 @@ func (v *XmllintValidator) ValidateSchemas(ctx context.Context, xml []byte) erro
 		fmt.Fprintf(&wrapper, `  <xs:import namespace="%s" schemaLocation="%s"/>`+"\n", escapeAttr(l.Namespace), escapeAttr(filepath.ToSlash(abs)))
 	}
 	wrapper.WriteString(`</xs:schema>` + "\n")
+	if imported == 0 {
+		return errors.New("xmlschema: el documento no declara esquemas del SAT en xsi:schemaLocation")
+	}
 
 	dir, err := os.MkdirTemp("", "go-cfdi-utils-xsd-*")
 	if err != nil {

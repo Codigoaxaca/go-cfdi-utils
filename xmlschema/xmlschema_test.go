@@ -7,9 +7,11 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/codigoaxaca/go-cfdi-utils/internal/testresources"
 	"github.com/codigoaxaca/go-cfdi-utils/nodes"
-	"github.com/codigoaxaca/go-cfdi-utils/xmlresolver"
 )
+
+func TestMain(m *testing.M) { testresources.Main(m) }
 
 func TestSchemaLocations(t *testing.T) {
 	root, err := nodes.ParseXMLFile("../testdata/cfdi/cfdi40-real.xml")
@@ -23,7 +25,7 @@ func TestSchemaLocations(t *testing.T) {
 }
 
 func TestValidateSchemas(t *testing.T) {
-	v, err := NewXmllint(xmlresolver.New())
+	v, err := NewXmllint(nil)
 	if errors.Is(err, ErrXmllintNotFound) {
 		t.Skip("xmllint no está instalado")
 	}

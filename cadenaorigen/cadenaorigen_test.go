@@ -1,19 +1,22 @@
 package cadenaorigen
 
 import (
+	"context"
 	"errors"
 	"fmt"
-	"io/fs"
-	"net/http"
-	"net/http/httptest"
+	"log/slog"
 	"os"
 	"path/filepath"
 	"strings"
 	"sync"
-	"sync/atomic"
 	"testing"
 	"testing/fstest"
+
+	"github.com/codigoaxaca/go-cfdi-utils/internal/testresources"
+	"github.com/codigoaxaca/go-cfdi-utils/satresources"
 )
+
+func TestMain(m *testing.M) { testresources.Main(m) }
 
 func TestGoldens(t *testing.T) {
 	files, err := filepath.Glob("../testdata/cfdi/*.xml")
@@ -135,52 +138,56 @@ func TestFSIncludesNamespacesAndBuiltins(t *testing.T) {
 	if err != nil || got != "\n last text nested\n" {
 		t.Fatalf("got %q: %v", got, err)
 	}
-	// FS overrides the embedded document, with HTTP/HTTPS sharing one key.
+	// WithFS uses only the given files, with HTTP/HTTPS sharing one key.
 	override := fstest.MapFS{"www.sat.gob.mx/sitio_internet/cfd/4/cadenaoriginal_4_0/cadenaoriginal_4_0.xslt": {Data: []byte(styleHead + `<xsl:template match="/">override</xsl:template></xsl:stylesheet>`)}}
 	got, err = NewBuilder(WithFS(override)).Build([]byte(`<x/>`), strings.Replace(XsltCfdi40, "http:", "https:", 1))
 	if err != nil || got != "override" {
 		t.Fatalf("%q %v", got, err)
 	}
 }
-func TestHTTPCache(t *testing.T) {
-	var hits atomic.Int32
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		hits.Add(1)
-		fmt.Fprint(w, styleHead+`<xsl:template match="/">downloaded</xsl:template></xsl:stylesheet>`)
-	}))
-	defer server.Close()
-	b := NewBuilder(WithHTTPClient(server.Client()))
-	for i := 0; i < 3; i++ {
-		got, err := b.Build([]byte(`<x/>`), server.URL+"/main.xslt")
-		if err != nil || got != "downloaded" {
-			t.Fatalf("%q %v", got, err)
+func TestAllEntryPointsCompile(t *testing.T) {
+	b := NewBuilder()
+	for _, loc := range []string{XsltCfdi40, XsltCfdi33, XsltTfd11, XsltRetenciones20} {
+		if _, err := b.compile(loc); err != nil {
+			t.Errorf("%s: %v", loc, err)
 		}
-	}
-	if hits.Load() != 1 {
-		t.Fatal(hits.Load())
-	}
-	if _, err := NewBuilder().Build([]byte(`<x/>`), server.URL+"/main.xslt"); err == nil {
-		t.Fatal("unexpected network fallback")
 	}
 }
-func TestAllStylesheetsCompile(t *testing.T) {
-	b := NewBuilder()
-	err := fs.WalkDir(resources, "resources", func(path string, d fs.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
-		if !d.IsDir() && strings.HasSuffix(path, ".xslt") {
-			_, e := b.compile("http://" + strings.TrimPrefix(path, "resources/"))
-			if e != nil {
-				t.Errorf("%s: %v", path, e)
-			}
-		}
-		return nil
-	})
+
+// El constructor usa la versión nueva en cuanto el almacén la activa.
+func TestBuilderFollowsStoreVersion(t *testing.T) {
+	sat := testresources.NewFakeSAT()
+	store := satresources.New(satresources.Config{Dir: t.TempDir(), HTTPClient: sat.Client(), Logger: slog.New(slog.DiscardHandler)})
+	b := NewBuilder(WithStore(store))
+	data, err := os.ReadFile("../testdata/cfdi/cfdi40-real.xml")
 	if err != nil {
 		t.Fatal(err)
 	}
+	before, err := b.Build(data, XsltCfdi40)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// El SAT cambia la plantilla de Concepto: ya no incluye la descripción.
+	key := "www.sat.gob.mx/sitio_internet/cfd/4/cadenaoriginal_4_0/cadenaoriginal_4_0.xslt"
+	xsl := string(sat.Get(key))
+	changed := strings.Replace(xsl, `<xsl:with-param name="valor" select="./@Descripcion"/>`, `<xsl:with-param name="valor" select="./@Unidad"/>`, 1)
+	if changed == xsl {
+		t.Fatal("no se encontró la plantilla a modificar")
+	}
+	sat.Set(key, []byte(changed))
+	res, err := store.Refresh(context.Background())
+	if err != nil || !res.Changed {
+		t.Fatalf("Refresh: %+v %v", res, err)
+	}
+	after, err := b.Build(data, XsltCfdi40)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if after == before {
+		t.Fatal("el constructor siguió usando la versión anterior")
+	}
 }
+
 func TestErrors(t *testing.T) {
 	for _, xslt := range []string{styleHead + `<xsl:template match="/"><xsl:choose/></xsl:template></xsl:stylesheet>`, styleHead + `<xsl:template match="/"><xsl:call-template name="missing"/></xsl:template></xsl:stylesheet>`, `not XML`} {
 		b := NewBuilder(WithFS(fstest.MapFS{"test.invalid/a": {Data: []byte(xslt)}}))

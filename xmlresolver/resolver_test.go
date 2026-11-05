@@ -5,8 +5,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
-	"path/filepath"
-	"strings"
 	"sync/atomic"
 	"testing"
 )
@@ -59,36 +57,6 @@ func TestGetWithoutCacheAndErrors(t *testing.T) {
 	}
 	if _, err := NewWithLocalPath(t.TempDir()).LocalFileFor("no-es-url"); err == nil {
 		t.Fatal("se esperaba error de URL")
-	}
-}
-
-func TestResolveSchemaRewritesImports(t *testing.T) {
-	mux := http.NewServeMux()
-	var base string
-	mux.HandleFunc("/main/main.xsd", func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(`<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"><xs:import namespace="urn:cat" schemaLocation="` + base + `/cat/cat.xsd"/><xs:include schemaLocation="types.xsd"/></xs:schema>`))
-	})
-	mux.HandleFunc("/main/types.xsd", func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(`<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"/>`))
-	})
-	mux.HandleFunc("/cat/cat.xsd", func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(`<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:cat"/>`))
-	})
-	srv := httptest.NewServer(mux)
-	defer srv.Close()
-	base = srv.URL
-
-	r := NewWithLocalPath(t.TempDir())
-	local, err := r.ResolveSchema(context.Background(), srv.URL+"/main/main.xsd")
-	if err != nil {
-		t.Fatal(err)
-	}
-	data, _ := os.ReadFile(local)
-	if strings.Contains(string(data), "127.0.0.1") || !strings.Contains(string(data), `schemaLocation="../cat/cat.xsd"`) || !strings.Contains(string(data), `schemaLocation="types.xsd"`) {
-		t.Fatalf("referencias no reescritas: %s", data)
-	}
-	if _, err := os.Stat(filepath.Join(filepath.Dir(local), "types.xsd")); err != nil {
-		t.Fatal(err)
 	}
 }
 

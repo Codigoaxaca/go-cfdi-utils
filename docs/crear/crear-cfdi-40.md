@@ -136,18 +136,20 @@ func main() {
 `NewCreator` (y `NewValidator`) aceptan opciones:
 
 ```go
+store := satresources.New(satresources.Config{Dir: "/var/cache/sat"})
 creator := cfdi40.NewCreator(attrs,
-	cfdi40.WithResolver(xmlresolver.NewWithLocalPath("/var/cache/sat")), // caché de recursos del SAT
-	cfdi40.WithSchemaValidator(nil),                                    // desactivar validación XSD
-	cfdi40.WithCadenaOrigenBuilder(miBuilder),                           // generador de cadena propio
+	cfdi40.WithResources(store),               // almacén de XSLT y XSD (satresources)
+	cfdi40.WithSchemaValidator(nil),           // desactivar validación XSD
+	cfdi40.WithCadenaOrigenBuilder(miBuilder), // generador de cadena propio
 )
 ```
 
 | Opción | Predeterminado |
 |--------|----------------|
-| `WithCadenaOrigenBuilder(b)` | `cadenaorigen.NewBuilder()`: genera la cadena original en Go puro con los XSLT del SAT incluidos en la librería. |
-| `WithResolver(r)` | `xmlresolver.New()`: descarga recursos del SAT (certificados, XSD) y los guarda en `~/Library/Caches/go-cfdi-utils/sat` (macOS) o `~/.cache/go-cfdi-utils/sat` (Linux). `nil` desactiva las validaciones que requieren internet. |
-| `WithSchemaValidator(v)` | `xmlschema.NewXmllint(...)` si `xmllint` está instalado; `nil` desactiva la validación XSD. |
+| `WithResources(store)` | `satresources.Default()`: descarga los XSLT y XSD del SAT, los guarda en disco y revisa cada mes si cambiaron (ver [recursos del SAT](../componentes/recursos-sat.md)). |
+| `WithCadenaOrigenBuilder(b)` | `cadenaorigen.NewBuilder()`: genera la cadena original en Go puro con los XSLT del almacén de recursos. |
+| `WithResolver(r)` | `xmlresolver.New()`: descarga los certificados del SAT para validar el timbre y los guarda en caché. `nil` desactiva esa validación. |
+| `WithSchemaValidator(v)` | `xmlschema.NewXmllint(...)` si `xmllint` está instalado, con los XSD del almacén de recursos; `nil` desactiva la validación XSD. |
 
 ## Agregar nodos
 

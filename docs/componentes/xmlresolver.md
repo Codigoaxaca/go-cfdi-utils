@@ -1,16 +1,15 @@
-# Resolvedor de recursos del SAT (`xmlresolver`)
+# Certificados del SAT (`xmlresolver`)
 
-Algunas tareas necesitan recursos publicados por el SAT:
+Para validar el sello del Timbre Fiscal Digital (validación `TFDSELLO01`) se necesita el
+certificado con el que el SAT o el PAC selló el timbre. El SAT lo publica en
+`https://rdc.sat.gob.mx/rccf/...`.
 
-- Los certificados con los que el SAT (o el PAC) sella el Timbre Fiscal Digital, publicados en
-  `https://rdc.sat.gob.mx/rccf/...`, necesarios para la validación `TFDSELLO01`.
-- Los esquemas XSD (y los XSD que importan, como los catálogos), necesarios para la validación
-  `XSD01`.
+`xmlresolver.Resolver` descarga esos certificados y los guarda en una caché local para no volver
+a descargarlos. Un certificado no cambia nunca, así que esta caché no caduca.
 
-`xmlresolver.Resolver` los descarga y los guarda en una caché local para no volver a descargarlos.
-
-> Los archivos XSLT para la cadena original **no** se descargan: vienen incluidos en la librería
-> (ver [cadena de origen](cadena-de-origen.md)).
+> Los recursos que sí pueden cambiar, los XSLT de la cadena original y los esquemas XSD, los
+> administra [`satresources`](recursos-sat.md), que revisa cada mes si el SAT publicó versiones
+> nuevas.
 
 ```go
 import "github.com/codigoaxaca/go-cfdi-utils/xmlresolver"
@@ -20,11 +19,8 @@ r := xmlresolver.New() // caché en xmlresolver.DefaultLocalPath()
 // certificado del SAT por número (atributo NoCertificadoSAT del timbre)
 cert, err := r.SatCertificate(ctx, "00001000000505211329")
 
-// cualquier recurso
-data, err := r.Get(ctx, "http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd")
-
-// XSD con todas sus importaciones descargadas y reescritas a rutas locales
-local, err := r.ResolveSchema(ctx, "http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd")
+// cualquier archivo que no cambie
+data, err := r.Get(ctx, "https://rdc.sat.gob.mx/rccf/000010/000005/05/21/13/00001000000505211329.cer")
 ```
 
 ## Ubicación de la caché
@@ -35,8 +31,7 @@ local, err := r.ResolveSchema(ctx, "http://www.sat.gob.mx/sitio_internet/cfd/4/c
 - Linux: `$XDG_CACHE_HOME/go-cfdi-utils/sat` o `~/.cache/go-cfdi-utils/sat`
 - Windows: `%LocalAppData%\go-cfdi-utils\sat`
 
-Los archivos se guardan con la estructura `<caché>/<host>/<ruta de la URL>`, por ejemplo
-`<caché>/www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd`.
+Los archivos se guardan con la estructura `<caché>/<host>/<ruta de la URL>`.
 
 ```go
 r := xmlresolver.NewWithLocalPath("/var/cache/mi-app/sat") // caché propia
@@ -47,14 +42,12 @@ r := &xmlresolver.Resolver{LocalPath: "...", Client: miClienteHTTP}
 Para usarlo en la creación o validación de CFDI:
 
 ```go
-creator := cfdi40.NewCreator(attrs, cfdi40.WithResolver(r))
 validator := cfdi40.NewValidator(cfdi40.WithResolver(r))
 ```
 
-Con `cfdi40.WithResolver(nil)` no se descarga nada y las validaciones que lo necesitan quedan
-con estado `NONE`.
+Con `cfdi40.WithResolver(nil)` no se descarga nada y `TFDSELLO01` queda con estado `NONE`.
 
-## Descargar previamente los recursos
+## Servidores sin acceso a internet
 
-En servidores sin acceso a internet puedes llenar la caché en otro equipo (por ejemplo validando
-un CFDI) y copiar el directorio, o descargar los archivos con la misma estructura de carpetas.
+Puedes llenar la caché en otro equipo, por ejemplo validando los CFDI timbrados por tus PAC, y
+copiar el directorio.

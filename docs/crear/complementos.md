@@ -133,7 +133,7 @@ if tfd, ok := tfd11.FromComprobante(comprobante); ok {
 ## Complementos sin paquete propio
 
 Cualquier complemento se puede construir con [nodos](../componentes/nodos.md). La cadena
-original funciona igual porque los XSLT de todos los complementos del SAT vienen incluidos
+original funciona igual porque la hoja de estilo del SAT ya incluye todos los complementos
 (Nómina, Comercio Exterior, INE, IEDU, Donatarias, Divisas, Vehículo usado, etc.).
 
 Por ejemplo, el complemento de Instituciones Educativas va dentro de `ComplementoConcepto`:

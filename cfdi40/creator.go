@@ -30,6 +30,7 @@ import (
 	"github.com/codigoaxaca/go-cfdi-utils/cadenaorigen"
 	"github.com/codigoaxaca/go-cfdi-utils/credentials"
 	"github.com/codigoaxaca/go-cfdi-utils/nodes"
+	"github.com/codigoaxaca/go-cfdi-utils/satresources"
 	"github.com/codigoaxaca/go-cfdi-utils/sumasconceptos"
 	"github.com/codigoaxaca/go-cfdi-utils/validate"
 	"github.com/codigoaxaca/go-cfdi-utils/validate/cfdi40validators"
@@ -44,6 +45,8 @@ var ErrKeyDoesNotBelongToCertificate = errors.New("cfdi40: la llave privada no c
 // config contiene las dependencias compartidas por Creator y Validator.
 type config struct {
 	cadenaOrigen    cadenaorigen.Builder
+	cadenaSet       bool
+	resources       *satresources.Store
 	resolver        *xmlresolver.Resolver
 	schemaValidator validate.SchemaValidator
 	schemaSet       bool
@@ -52,33 +55,45 @@ type config struct {
 // Option configura un Creator o un Validator.
 type Option func(*config)
 
-// WithCadenaOrigenBuilder establece el generador de cadena original. Por
-// omisión se usa cadenaorigen.NewBuilder() que no requiere herramientas externas.
-func WithCadenaOrigenBuilder(b cadenaorigen.Builder) Option {
-	return func(c *config) { c.cadenaOrigen = b }
+// WithResources usa el almacén de recursos del SAT indicado (XSLT de cadena
+// original y esquemas XSD) en lugar de satresources.Default().
+func WithResources(store *satresources.Store) Option {
+	return func(c *config) { c.resources = store }
 }
 
-// WithResolver establece el resolvedor de recursos del SAT (certificados y
-// esquemas). Por omisión se usa xmlresolver.New() con caché en disco. Usar nil
-// desactiva las validaciones que requieren descargar recursos.
+// WithCadenaOrigenBuilder establece el generador de cadena original. Por
+// omisión se usa cadenaorigen.NewBuilder() con el almacén de recursos
+// configurado. Usar nil desactiva las validaciones que requieren la cadena
+// original.
+func WithCadenaOrigenBuilder(b cadenaorigen.Builder) Option {
+	return func(c *config) { c.cadenaOrigen = b; c.cadenaSet = true }
+}
+
+// WithResolver establece el resolvedor de certificados del SAT (para validar
+// el sello del Timbre Fiscal Digital). Por omisión se usa xmlresolver.New()
+// con caché en disco. Usar nil desactiva esa validación.
 func WithResolver(r *xmlresolver.Resolver) Option {
 	return func(c *config) { c.resolver = r }
 }
 
 // WithSchemaValidator establece el validador de esquemas XSD. Por omisión se
-// usa xmllint si está disponible en el sistema. Usar nil desactiva la
-// validación de esquemas (XSD01 quedará con estado NONE).
+// usa xmllint si está disponible en el sistema, con los esquemas del almacén
+// de recursos. Usar nil desactiva la validación de esquemas (XSD01 quedará
+// con estado NONE).
 func WithSchemaValidator(v validate.SchemaValidator) Option {
 	return func(c *config) { c.schemaValidator = v; c.schemaSet = true }
 }
 
 func newConfig(opts []Option) config {
-	c := config{cadenaOrigen: cadenaorigen.NewBuilder(), resolver: xmlresolver.New()}
+	c := config{resolver: xmlresolver.New()}
 	for _, opt := range opts {
 		opt(&c)
 	}
-	if !c.schemaSet && c.resolver != nil {
-		if sv, err := xmlschema.NewXmllint(c.resolver); err == nil {
+	if !c.cadenaSet {
+		c.cadenaOrigen = cadenaorigen.NewBuilder(cadenaorigen.WithStore(c.resources))
+	}
+	if !c.schemaSet {
+		if sv, err := xmlschema.NewXmllint(c.resources); err == nil {
 			c.schemaValidator = sv
 		}
 	}

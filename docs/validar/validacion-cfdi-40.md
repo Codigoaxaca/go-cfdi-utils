@@ -56,17 +56,25 @@ asserts, err := cfdi40.NewValidator().ValidateXML(limpio)
 
 | Validación | Necesita | Opción para configurarlo |
 |------------|----------|---------------------------|
-| `XSD01` esquemas XSD | `xmllint` instalado y descargar los XSD del SAT | `cfdi40.WithSchemaValidator(...)` |
-| `SELLO08` sello del comprobante | generar la cadena original (incluido, sin internet) | `cfdi40.WithCadenaOrigenBuilder(...)` |
+| `XSD01` esquemas XSD | `xmllint` instalado y los XSD del SAT | `cfdi40.WithSchemaValidator(...)`, `cfdi40.WithResources(...)` |
+| `SELLO08` sello del comprobante | generar la cadena original con los XSLT del SAT | `cfdi40.WithCadenaOrigenBuilder(...)`, `cfdi40.WithResources(...)` |
 | `TFDSELLO01` sello del SAT | descargar el certificado del SAT de `rdc.sat.gob.mx` | `cfdi40.WithResolver(...)` |
 
-Los recursos descargados se guardan en caché (ver [xmlresolver](../componentes/xmlresolver.md)),
-por lo que solo se descargan la primera vez. Si alguno no está disponible, la validación
-correspondiente queda con estado `NONE` y una explicación.
+Los XSLT y XSD se guardan en disco y se revisan cada mes (ver
+[recursos del SAT](../componentes/recursos-sat.md)). Los certificados del SAT se guardan en la
+caché de [xmlresolver](../componentes/xmlresolver.md). Si alguno no está disponible, la
+validación correspondiente queda con estado `NONE` o `ERROR` y una explicación.
 
 ```go
-// sin acceso a internet ni xmllint
-validator := cfdi40.NewValidator(cfdi40.WithResolver(nil), cfdi40.WithSchemaValidator(nil))
+// sin acceso a internet ni xmllint (los XSLT vienen del respaldo incluido)
+import _ "github.com/codigoaxaca/go-cfdi-utils/satresources/embedded"
+
+store := satresources.New(satresources.Config{Offline: true})
+validator := cfdi40.NewValidator(
+	cfdi40.WithResources(store),
+	cfdi40.WithResolver(nil),
+	cfdi40.WithSchemaValidator(nil),
+)
 ```
 
 ## Status

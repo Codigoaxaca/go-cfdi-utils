@@ -1,6 +1,10 @@
-// Package xmlresolver obtiene recursos publicados por el SAT (certificados
-// de sellado del SAT, esquemas XSD) y los almacena en una caché local para no
-// descargarlos cada vez.
+// Package xmlresolver obtiene los certificados de sellado del SAT (para
+// verificar el sello del Timbre Fiscal Digital) y otros archivos que no
+// cambian, y los guarda en una caché local para no descargarlos cada vez.
+//
+// Los recursos que sí pueden cambiar (XSLT de cadena original y esquemas XSD)
+// los administra el paquete satresources, que revisa periódicamente si el SAT
+// publicó versiones nuevas.
 //
 //	r := xmlresolver.New() // caché en el directorio de caché del usuario
 //	cert, err := r.SatCertificate(ctx, "00001000000505211329")
@@ -16,9 +20,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"regexp"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/codigoaxaca/go-cfdi-utils/credentials"
@@ -31,8 +33,6 @@ type Resolver struct {
 	LocalPath string
 	// Client es el cliente HTTP, si es nil se usa uno con tiempo límite de 30 segundos.
 	Client *http.Client
-
-	mu sync.Mutex
 }
 
 // New crea un Resolver con caché en DefaultLocalPath().
@@ -153,71 +153,6 @@ func (r *Resolver) SatCertificate(ctx context.Context, noCertificado string) (*c
 		return nil, err
 	}
 	return cert, nil
-}
-
-var schemaLocationRe = regexp.MustCompile(`(<(?:[A-Za-z0-9_]+:)?(?:import|include|redefine)\b[^>]*?\bschemaLocation\s*=\s*)(["'])([^"']+)(["'])`)
-
-// ResolveSchema descarga un esquema XSD y, de forma recursiva, todos los
-// esquemas que importa o incluye. Las referencias se reescriben a rutas
-// locales relativas, de forma que el archivo devuelto puede usarse sin acceso
-// a internet. Requiere LocalPath; si está vacío se usa un directorio temporal.
-func (r *Resolver) ResolveSchema(ctx context.Context, resource string) (string, error) {
-	r.mu.Lock()
-	defer r.mu.Unlock()
-	target := r
-	if r.LocalPath == "" {
-		target = &Resolver{LocalPath: filepath.Join(os.TempDir(), "go-cfdi-utils", "sat"), Client: r.Client}
-	}
-	return target.resolveSchema(ctx, resource, map[string]string{})
-}
-
-func (r *Resolver) resolveSchema(ctx context.Context, resource string, seen map[string]string) (string, error) {
-	if local, ok := seen[resource]; ok {
-		return local, nil
-	}
-	local, err := r.LocalFileFor(resource)
-	if err != nil {
-		return "", err
-	}
-	seen[resource] = local
-	data, err := os.ReadFile(local)
-	if err != nil || len(data) == 0 {
-		data, err = r.Download(ctx, resource)
-		if err != nil {
-			return "", err
-		}
-	}
-	base, _ := url.Parse(resource)
-	var resolveErr error
-	rewritten := schemaLocationRe.ReplaceAllFunc(data, func(m []byte) []byte {
-		parts := schemaLocationRe.FindSubmatch(m)
-		ref := string(parts[3])
-		refURL, err := base.Parse(ref)
-		if err != nil {
-			resolveErr = err
-			return m
-		}
-		if refURL.Scheme != "http" && refURL.Scheme != "https" {
-			return m // ya es local
-		}
-		childLocal, err := r.resolveSchema(ctx, refURL.String(), seen)
-		if err != nil {
-			resolveErr = err
-			return m
-		}
-		rel, err := filepath.Rel(filepath.Dir(local), childLocal)
-		if err != nil {
-			rel = childLocal
-		}
-		return []byte(string(parts[1]) + string(parts[2]) + filepath.ToSlash(rel) + string(parts[4]))
-	})
-	if resolveErr != nil {
-		return "", resolveErr
-	}
-	if err := writeFileAtomic(local, rewritten); err != nil {
-		return "", err
-	}
-	return local, nil
 }
 
 func writeFileAtomic(path string, data []byte) error {

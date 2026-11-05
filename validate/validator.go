@@ -16,8 +16,8 @@ type Environment struct {
 	// CadenaOrigen genera la cadena original. Si es nil la validación del
 	// sello no se puede realizar.
 	CadenaOrigen cadenaorigen.Builder
-	// Resolver obtiene recursos del SAT (certificados, esquemas). Si es nil
-	// las validaciones que necesitan descargar recursos no se realizan.
+	// Resolver obtiene los certificados del SAT para validar el sello del
+	// Timbre Fiscal Digital. Si es nil esa validación no se realiza.
 	Resolver *xmlresolver.Resolver
 	// SchemaValidator valida el XML contra sus esquemas XSD. Si es nil la
 	// validación de esquemas no se realiza.

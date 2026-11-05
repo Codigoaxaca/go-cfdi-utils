@@ -33,7 +33,8 @@ para consultar su estado en el SAT. Está inspirada en la librería PHP
 - [Consulta del estado de un CFDI en el SAT](componentes/estado-sat.md)
 - [Cadena de origen](componentes/cadena-de-origen.md)
 - [Estructura de datos `nodes`](componentes/nodos.md)
-- [Resolvedor de recursos del SAT](componentes/xmlresolver.md)
+- [Recursos del SAT (XSLT y XSD)](componentes/recursos-sat.md) — descarga, actualización mensual, forzar y borrar caché, uso sin internet
+- [Certificados del SAT (`xmlresolver`)](componentes/xmlresolver.md)
 
 ## Utilerías
 

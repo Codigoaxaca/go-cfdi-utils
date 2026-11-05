@@ -32,7 +32,7 @@ Si ya conoces `CfdiUtils` de PHP, esta tabla te ayuda a encontrar lo equivalente
 | `CfdiUtils\Certificado\NodeCertificado` | `credentials.ParseCertificate([]byte(comprobante.Attr("Certificado")))` |
 | `CfdiUtils\CadenaOrigen\DOMBuilder` | `cadenaorigen.XsltBuilder` (Go puro, sin `ext-xsl`) |
 | `CfdiUtils\TimbreFiscalDigital\TfdCadenaDeOrigen` | `cadenaorigen.BuildTFD` |
-| `CfdiUtils\XmlResolver\XmlResolver` | `xmlresolver.Resolver` |
+| `CfdiUtils\XmlResolver\XmlResolver` | `satresources.Store` (XSLT y XSD, con revisión mensual de cambios) y `xmlresolver.Resolver` (certificados del SAT) |
 | `CfdiUtils\ConsultaCfdiSat\WebService` | `estadosat.WebService` |
 | `CfdiUtils\ConsultaCfdiSat\RequestParameters` | `estadosat.RequestParameters` |
 | `CfdiUtils\ConsultaCfdiSat\StatusResponse` | `estadosat.StatusResponse` |
@@ -83,7 +83,7 @@ Si ya conoces `CfdiUtils` de PHP, esta tabla te ayuda a encontrar lo equivalente
 - CFDI de Retenciones (`RetencionesCreator20`): solo se genera la cadena original.
 - Elementos de complementos menos frecuentes (Nómina 1.2, Comercio Exterior 2.0, INE, IEDU,
   donatarias, etc.): se pueden construir con [`nodes`](componentes/nodos.md); la cadena original
-  ya los soporta porque los XSLT del SAT vienen incluidos.
+  ya los soporta porque usa los XSLT oficiales del SAT.
 - `QuickReader`: usa `SearchNode`/`SearchAttribute` o los elementos de `cfdi40`.
 - Los generadores de cadena alternativos (`SaxonbCliBuilder`, `GenkgoXslBuilder`): no son
   necesarios; implementa `cadenaorigen.Builder` si quieres usar otro.

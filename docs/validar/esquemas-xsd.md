@@ -19,7 +19,7 @@ automáticamente. Si no está, `XSD01` queda con estado `NONE`.
 ```go
 import "github.com/codigoaxaca/go-cfdi-utils/xmlschema"
 
-v, err := xmlschema.NewXmllint(xmlresolver.New())
+v, err := xmlschema.NewXmllint(nil) // nil: usa satresources.Default()
 if errors.Is(err, xmlschema.ErrXmllintNotFound) { /* ... */ }
 
 if err := v.ValidateSchemas(ctx, data); err != nil {
@@ -35,12 +35,17 @@ if err := v.ValidateSchemas(ctx, data); err != nil {
 Cómo funciona:
 
 1. Obtiene todos los pares espacio de nombres / XSD de los atributos `xsi:schemaLocation`.
-2. Descarga cada XSD y los que importa (recursivamente) a la caché del
-   [`xmlresolver`](../componentes/xmlresolver.md), reescribiendo las referencias a rutas locales.
+2. Pide cada XSD al almacén [`satresources`](../componentes/recursos-sat.md). El almacén lo
+   descarga junto con lo que importa la primera vez y lo guarda con las referencias reescritas a
+   rutas locales. También revisa cada mes si el SAT publicó cambios.
 3. Ejecuta `xmllint --noout --nonet --schema` con un esquema que importa todos.
 
+Solo se usan los esquemas publicados por el SAT (`sat.gob.mx`). Las ubicaciones de otros
+servidores, como las de algunas addendas, se ignoran: no se descargan ni se validan.
+
 La primera validación tarda más porque descarga los catálogos del SAT (varios MB); después se
-usan desde la caché.
+usan desde disco. Para no esperar en la primera factura, llama a
+`satresources.Default().Prepare(ctx)` al arrancar la aplicación.
 
 Si `XSD01` falla, el resto de validaciones ya no se ejecutan (`MustStop`), porque un XML que no
 sigue la estructura puede producir resultados confusos.

@@ -1,0 +1,665 @@
+{
+  "format": 1,
+  "id": "20261105T041938Z-3cbf75",
+  "created": "2026-11-05T04:19:38.327524Z",
+  "checked": "2026-11-05T04:19:38.327524Z",
+  "roots": [
+    "http://www.sat.gob.mx/sitio_internet/cfd/4/cadenaoriginal_4_0/cadenaoriginal_4_0.xslt",
+    "http://www.sat.gob.mx/sitio_internet/cfd/3/cadenaoriginal_3_3/cadenaoriginal_3_3.xslt",
+    "http://www.sat.gob.mx/sitio_internet/cfd/TimbreFiscalDigital/cadenaoriginal_TFD_1_1.xslt",
+    "http://www.sat.gob.mx/esquemas/retencionpago/2/retenciones.xslt",
+    "http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd",
+    "http://www.sat.gob.mx/sitio_internet/cfd/TimbreFiscalDigital/TimbreFiscalDigitalv11.xsd",
+    "http://www.sat.gob.mx/sitio_internet/cfd/Pagos/Pagos20.xsd",
+    "http://www.sat.gob.mx/sitio_internet/cfd/implocal/implocal.xsd",
+    "http://www.sat.gob.mx/sitio_internet/cfd/leyendasFiscales/leyendasFisc.xsd",
+    "http://www.sat.gob.mx/sitio_internet/cfd/CartaPorte/CartaPorte31.xsd",
+    "http://www.sat.gob.mx/esquemas/retencionpago/2/retencionpagov2.xsd"
+  ],
+  "files": {
+    "www.sat.gob.mx/esquemas/retencionpago/1/PlataformasTecnologicas10/ServiciosPlataformasTecnologicas10.xslt": {
+      "url": "http://www.sat.gob.mx/esquemas/retencionpago/1/PlataformasTecnologicas10/ServiciosPlataformasTecnologicas10.xslt",
+      "kind": "xslt",
+      "etag": "W/\"655c0fab8b356bb199f8a72bd0995c5f\"",
+      "lastModified": "Sat, 15 Aug 2020 04:35:08 GMT",
+      "sha256": "1dbf30a2427c3cfe23cf437a9791906479471bf1830c9151d70354690fb73034",
+      "size": 5981
+    },
+    "www.sat.gob.mx/esquemas/retencionpago/1/arrendamientoenfideicomiso/arrendamientoenfideicomiso.xslt": {
+      "url": "http://www.sat.gob.mx/esquemas/retencionpago/1/arrendamientoenfideicomiso/arrendamientoenfideicomiso.xslt",
+      "kind": "xslt",
+      "etag": "W/\"d22a37cf9ccca853946777b6bc9e097d\"",
+      "lastModified": "Sat, 15 Aug 2020 04:35:08 GMT",
+      "sha256": "ffc67e933bb4542574347979330f37f1b02573751e7e6a397d138a8444684498",
+      "size": 1802
+    },
+    "www.sat.gob.mx/esquemas/retencionpago/1/catalogos/catRetenciones.xsd": {
+      "url": "http://www.sat.gob.mx/esquemas/retencionpago/1/catalogos/catRetenciones.xsd",
+      "kind": "xsd",
+      "etag": "W/\"c75ef8fd6fd2c6dc6315670f4b3c9ecc\"",
+      "lastModified": "Tue, 04 Jun 2024 16:58:00 GMT",
+      "sha256": "37d7411aeaeb0f09bd14182cecbc50da857e882741bc6ef052bc8054e15f9487",
+      "size": 14649
+    },
+    "www.sat.gob.mx/esquemas/retencionpago/1/dividendos/dividendos.xslt": {
+      "url": "http://www.sat.gob.mx/esquemas/retencionpago/1/dividendos/dividendos.xslt",
+      "kind": "xslt",
+      "etag": "W/\"fab646205ef2e481d42745975c9ead22\"",
+      "lastModified": "Sat, 15 Aug 2020 04:35:09 GMT",
+      "sha256": "644db84efb02c5775afb51a4a49e6e869ccc4c69ac50bdd1981ab456c9121fab",
+      "size": 2600
+    },
+    "www.sat.gob.mx/esquemas/retencionpago/1/enajenaciondeacciones/enajenaciondeacciones.xslt": {
+      "url": "http://www.sat.gob.mx/esquemas/retencionpago/1/enajenaciondeacciones/enajenaciondeacciones.xslt",
+      "kind": "xslt",
+      "etag": "W/\"fc98ee98c1b51bed1594084a6fb32710\"",
+      "lastModified": "Sat, 15 Aug 2020 04:35:09 GMT",
+      "sha256": "df6b302ac7a47289c9ca1c5093f3d156d596286d9449f0cb673d16fa2f4e4df9",
+      "size": 1287
+    },
+    "www.sat.gob.mx/esquemas/retencionpago/1/fideicomisonoempresarial/fideicomisonoempresarial.xslt": {
+      "url": "http://www.sat.gob.mx/esquemas/retencionpago/1/fideicomisonoempresarial/fideicomisonoempresarial.xslt",
+      "kind": "xslt",
+      "etag": "W/\"908c251c655fc631ee9520296c3e6807\"",
+      "lastModified": "Sat, 15 Aug 2020 04:35:09 GMT",
+      "sha256": "656d03facc2c0981b9644706d4bacf0a01cc1f13c2d2b1551091270c08710be3",
+      "size": 3525
+    },
+    "www.sat.gob.mx/esquemas/retencionpago/1/intereses/intereses.xslt": {
+      "url": "http://www.sat.gob.mx/esquemas/retencionpago/1/intereses/intereses.xslt",
+      "kind": "xslt",
+      "etag": "W/\"bea483a38767c917f09bd6e3e473baba\"",
+      "lastModified": "Sat, 15 Aug 2020 04:35:10 GMT",
+      "sha256": "1e7e4da0b66b63e55681658be203a766038bd4133479b410809f6408f7adc6e3",
+      "size": 1620
+    },
+    "www.sat.gob.mx/esquemas/retencionpago/1/intereseshipotecarios/intereseshipotecarios.xslt": {
+      "url": "http://www.sat.gob.mx/esquemas/retencionpago/1/intereseshipotecarios/intereseshipotecarios.xslt",
+      "kind": "xslt",
+      "etag": "W/\"2915c474b960a9e0106ba577dc03a6d4\"",
+      "lastModified": "Sat, 15 Aug 2020 04:35:10 GMT",
+      "sha256": "edb6860e7859c374d1a917c2cc3ebf637d6e78a9131aaa78c73219423b541ad4",
+      "size": 1857
+    },
+    "www.sat.gob.mx/esquemas/retencionpago/1/operacionesconderivados/operacionesconderivados.xslt": {
+      "url": "http://www.sat.gob.mx/esquemas/retencionpago/1/operacionesconderivados/operacionesconderivados.xslt",
+      "kind": "xslt",
+      "etag": "W/\"705266172f80f793272b87dd86459f14\"",
+      "lastModified": "Sat, 15 Aug 2020 04:35:10 GMT",
+      "sha256": "73b42b6d44fa95051b0ef8cea776a6325a819ed79fdf07be64eb35c2e4ab8a13",
+      "size": 1165
+    },
+    "www.sat.gob.mx/esquemas/retencionpago/1/pagosaextranjeros/pagosaextranjeros.xslt": {
+      "url": "http://www.sat.gob.mx/esquemas/retencionpago/1/pagosaextranjeros/pagosaextranjeros.xslt",
+      "kind": "xslt",
+      "etag": "W/\"5feb5d464f8c7e5ec2c9f3098193c9ce\"",
+      "lastModified": "Sat, 15 Aug 2020 04:35:10 GMT",
+      "sha256": "7f859ddaa3efbeba4165f89906f89051b3c14cb21e477b59bc4ae27cbe530383",
+      "size": 2712
+    },
+    "www.sat.gob.mx/esquemas/retencionpago/1/planesderetiro11/planesderetiro11.xslt": {
+      "url": "http://www.sat.gob.mx/esquemas/retencionpago/1/planesderetiro11/planesderetiro11.xslt",
+      "kind": "xslt",
+      "etag": "W/\"fb6ad83dd92b5eee21bf1ac875503454\"",
+      "lastModified": "Sat, 15 Aug 2020 04:35:11 GMT",
+      "sha256": "46f91ec9be6822642f259fd0e7f1ced75174c1de57a59725fbf54f592a0ed661",
+      "size": 3114
+    },
+    "www.sat.gob.mx/esquemas/retencionpago/1/premios/premios.xslt": {
+      "url": "http://www.sat.gob.mx/esquemas/retencionpago/1/premios/premios.xslt",
+      "kind": "xslt",
+      "etag": "W/\"0211a906a6076137b1b0b7c058940bdb\"",
+      "lastModified": "Sat, 15 Aug 2020 04:35:11 GMT",
+      "sha256": "a005c62b350be601bd57cec1a15817453ba5e3c423a86afe67326b965d0c3e06",
+      "size": 1345
+    },
+    "www.sat.gob.mx/esquemas/retencionpago/1/sectorfinanciero/sectorfinanciero.xslt": {
+      "url": "http://www.sat.gob.mx/esquemas/retencionpago/1/sectorfinanciero/sectorfinanciero.xslt",
+      "kind": "xslt",
+      "etag": "W/\"06b8ccd4cd27f1ca71414f5dc98edeb6\"",
+      "lastModified": "Sat, 15 Aug 2020 04:35:12 GMT",
+      "sha256": "73436ce52fcedf4af1f6d180c6c6490814a96956ad4b574d59e027ad6c241add",
+      "size": 1245
+    },
+    "www.sat.gob.mx/esquemas/retencionpago/2/retenciones.xslt": {
+      "url": "http://www.sat.gob.mx/esquemas/retencionpago/2/retenciones.xslt",
+      "kind": "xslt",
+      "etag": "\"d0d50c70e509ea996c49dbe667508afc\"",
+      "lastModified": "Fri, 24 Dec 2021 01:55:38 GMT",
+      "sha256": "b8cccf25955b1a5c12f20a6c2233f2644816fbc7bea2e98f8d87e74a88263d10",
+      "size": 10039,
+      "deps": [
+        "http://www.sat.gob.mx/sitio_internet/cfd/2/cadenaoriginal_2_0/utilerias.xslt",
+        "http://www.sat.gob.mx/esquemas/retencionpago/1/arrendamientoenfideicomiso/arrendamientoenfideicomiso.xslt",
+        "http://www.sat.gob.mx/esquemas/retencionpago/1/dividendos/dividendos.xslt",
+        "http://www.sat.gob.mx/esquemas/retencionpago/1/enajenaciondeacciones/enajenaciondeacciones.xslt",
+        "http://www.sat.gob.mx/esquemas/retencionpago/1/fideicomisonoempresarial/fideicomisonoempresarial.xslt",
+        "http://www.sat.gob.mx/esquemas/retencionpago/1/intereses/intereses.xslt",
+        "http://www.sat.gob.mx/esquemas/retencionpago/1/intereseshipotecarios/intereseshipotecarios.xslt",
+        "http://www.sat.gob.mx/esquemas/retencionpago/1/pagosaextranjeros/pagosaextranjeros.xslt",
+        "http://www.sat.gob.mx/esquemas/retencionpago/1/premios/premios.xslt",
+        "http://www.sat.gob.mx/esquemas/retencionpago/1/operacionesconderivados/operacionesconderivados.xslt",
+        "http://www.sat.gob.mx/esquemas/retencionpago/1/sectorfinanciero/sectorfinanciero.xslt",
+        "http://www.sat.gob.mx/esquemas/retencionpago/1/planesderetiro11/planesderetiro11.xslt",
+        "http://www.sat.gob.mx/esquemas/retencionpago/1/PlataformasTecnologicas10/ServiciosPlataformasTecnologicas10.xslt"
+      ]
+    },
+    "www.sat.gob.mx/esquemas/retencionpago/2/retencionpagov2.xsd": {
+      "url": "http://www.sat.gob.mx/esquemas/retencionpago/2/retencionpagov2.xsd",
+      "kind": "xsd",
+      "etag": "W/\"5aa84e15f288ad6d7a0ab9397ec6e8e0\"",
+      "lastModified": "Tue, 28 Dec 2021 17:28:29 GMT",
+      "sha256": "2e76e8d7731abac2abfeac0850adbba267e5e54ae31e49961c2177e3d7e03939",
+      "size": 20675,
+      "deps": [
+        "http://www.sat.gob.mx/esquemas/retencionpago/1/catalogos/catRetenciones.xsd",
+        "http://www.sat.gob.mx/sitio_internet/cfd/catalogos/catCFDI.xsd",
+        "http://www.sat.gob.mx/sitio_internet/cfd/tipoDatos/tdCFDI/tdCFDI.xsd"
+      ]
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/2/cadenaoriginal_2_0/utilerias.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/2/cadenaoriginal_2_0/utilerias.xslt",
+      "kind": "xslt",
+      "etag": "\"fe27182d40f1523e8bff3bd25f51d2b2\"",
+      "lastModified": "Sat, 08 Aug 2020 05:19:08 GMT",
+      "sha256": "1f7e9c9c04b2239cdf0928e6471d4f48165535c4d4d3ea445ec310b65cdf6c2c",
+      "size": 920
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/3/cadenaoriginal_3_3/cadenaoriginal_3_3.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/3/cadenaoriginal_3_3/cadenaoriginal_3_3.xslt",
+      "kind": "xslt",
+      "etag": "W/\"377ffb77d19946f6d54f07e7d0700b6e\"",
+      "lastModified": "Wed, 01 Dec 2021 15:13:17 GMT",
+      "sha256": "2cfd68ff167c88c9a0ce449c32b6fe1110e18c846d03812ca302d9defe672745",
+      "size": 18758,
+      "deps": [
+        "http://www.sat.gob.mx/sitio_internet/cfd/2/cadenaoriginal_2_0/utilerias.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/EstadoDeCuentaCombustible/ecc11.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/donat/donat11.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/divisas/divisas.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/implocal/implocal.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/leyendasFiscales/leyendasFisc.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/pfic/pfic.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/TuristaPasajeroExtranjero/TuristaPasajeroExtranjero.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/nomina/nomina12.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/cfdiregistrofiscal/cfdiregistrofiscal.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/pagoenespecie/pagoenespecie.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/aerolineas/aerolineas.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/valesdedespensa/valesdedespensa.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/consumodecombustibles/consumodecombustibles.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/notariospublicos/notariospublicos.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/vehiculousado/vehiculousado.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/servicioparcialconstruccion/servicioparcialconstruccion.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/renovacionysustitucionvehiculos/renovacionysustitucionvehiculos.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/certificadodestruccion/certificadodedestruccion.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/arteantiguedades/obrasarteantiguedades.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/ComercioExterior11/ComercioExterior11.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/ine/ine11.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/iedu/iedu.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/ventavehiculos/ventavehiculos11.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/terceros/terceros11.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/Pagos/Pagos10.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/detallista/detallista.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/EstadoDeCuentaCombustible/ecc12.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/consumodecombustibles/consumodeCombustibles11.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/GastosHidrocarburos10/GastosHidrocarburos10.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/IngresosHidrocarburos10/IngresosHidrocarburos.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/CartaPorte/CartaPorte.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/CartaPorte/CartaPorte20.xslt"
+      ]
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/4/cadenaoriginal_4_0/cadenaoriginal_4_0.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/4/cadenaoriginal_4_0/cadenaoriginal_4_0.xslt",
+      "kind": "xslt",
+      "etag": "W/\"80235f15569e7d9dfa81a67589ba04e8\"",
+      "lastModified": "Fri, 17 Apr 2026 00:30:45 GMT",
+      "sha256": "b0559b380e73b850ca8a3da53b077a6051a09d87068d8d98e82dfd4acfba7565",
+      "size": 21324,
+      "deps": [
+        "http://www.sat.gob.mx/sitio_internet/cfd/2/cadenaoriginal_2_0/utilerias.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/donat/donat11.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/divisas/divisas.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/implocal/implocal.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/leyendasFiscales/leyendasFisc.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/pfic/pfic.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/TuristaPasajeroExtranjero/TuristaPasajeroExtranjero.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/nomina/nomina12.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/cfdiregistrofiscal/cfdiregistrofiscal.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/pagoenespecie/pagoenespecie.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/aerolineas/aerolineas.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/valesdedespensa/valesdedespensa.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/notariospublicos/notariospublicos.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/vehiculousado/vehiculousado.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/servicioparcialconstruccion/servicioparcialconstruccion.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/renovacionysustitucionvehiculos/renovacionysustitucionvehiculos.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/certificadodestruccion/certificadodedestruccion.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/arteantiguedades/obrasarteantiguedades.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/ComercioExterior11/ComercioExterior11.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/ComercioExterior20/ComercioExterior20.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/ine/ine11.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/iedu/iedu.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/ventavehiculos/ventavehiculos11.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/detallista/detallista.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/EstadoDeCuentaCombustible/ecc12.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/consumodecombustibles/consumodeCombustibles11.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/GastosHidrocarburos10/GastosHidrocarburos10.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/IngresosHidrocarburos10/IngresosHidrocarburos.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/CartaPorte/CartaPorte20.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/Pagos/Pagos20.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/CartaPorte/CartaPorte30.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/CartaPorte/CartaPorte31.xslt",
+        "http://www.sat.gob.mx/sitio_internet/cfd/HidrocarburosPetro/hidrocarburospetroliferos.xslt"
+      ]
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd",
+      "kind": "xsd",
+      "etag": "W/\"97b3e3b126a19ddaaed47a57732ec005\"",
+      "lastModified": "Tue, 04 Jun 2024 17:12:17 GMT",
+      "sha256": "2489b5b535f5cbc6a6c2db6132620de1833f85372512d01deea62880e700e276",
+      "size": 50607,
+      "deps": [
+        "http://www.sat.gob.mx/sitio_internet/cfd/catalogos/catCFDI.xsd",
+        "http://www.sat.gob.mx/sitio_internet/cfd/tipoDatos/tdCFDI/tdCFDI.xsd"
+      ]
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/CartaPorte/CartaPorte.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/CartaPorte/CartaPorte.xslt",
+      "kind": "xslt",
+      "etag": "W/\"2da7901ce4420e229831fae234c16a9d\"",
+      "lastModified": "Sat, 10 Jul 2021 00:00:06 GMT",
+      "sha256": "00d9a350ace278012bfe9ed98721c6388696e6506f2e19bf6e4cd4fdfef580e7",
+      "size": 34076
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/CartaPorte/CartaPorte20.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/CartaPorte/CartaPorte20.xslt",
+      "kind": "xslt",
+      "etag": "W/\"5a7600bfc5592638ded23c70c0e7f359\"",
+      "lastModified": "Wed, 01 Dec 2021 19:10:38 GMT",
+      "sha256": "0f8fa95e65eaf1fbfaba34ee7c0b78396dd04c920b1b54facddd178fad55add5",
+      "size": 27549
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/CartaPorte/CartaPorte30.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/CartaPorte/CartaPorte30.xslt",
+      "kind": "xslt",
+      "etag": "W/\"4b19e91a64f97a4132e2b84e6c118b2e\"",
+      "lastModified": "Mon, 25 Sep 2023 17:47:48 GMT",
+      "sha256": "3da384b7797ab037c0fc37d79716e0f4eb7704c6a585353aa2d73c6f76892e35",
+      "size": 33207
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/CartaPorte/CartaPorte31.xsd": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/CartaPorte/CartaPorte31.xsd",
+      "kind": "xsd",
+      "etag": "W/\"2be3cb3fde07466b2d6434dcce758021\"",
+      "lastModified": "Mon, 17 Jun 2024 01:42:33 GMT",
+      "sha256": "31d40c4d96aea02b038b9a91db3b3a032310a037922ca663645177a6ab76a168",
+      "size": 117864,
+      "deps": [
+        "http://www.sat.gob.mx/sitio_internet/cfd/catalogos/catCFDI.xsd",
+        "http://www.sat.gob.mx/sitio_internet/cfd/tipoDatos/tdCFDI/tdCFDI.xsd",
+        "http://www.sat.gob.mx/sitio_internet/cfd/catalogos/ComExt/catComExt.xsd",
+        "http://www.sat.gob.mx/sitio_internet/cfd/catalogos/CartaPorte/catCartaPorte.xsd"
+      ]
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/CartaPorte/CartaPorte31.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/CartaPorte/CartaPorte31.xslt",
+      "kind": "xslt",
+      "etag": "W/\"d1f542a806081961b2e16c5957aecb7b\"",
+      "lastModified": "Mon, 17 Jun 2024 01:41:07 GMT",
+      "sha256": "6ef3db6a004a7b27014bf8f03b9762f337479f0694525b193eaa9e3ff058fa0f",
+      "size": 34063
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/ComercioExterior11/ComercioExterior11.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/ComercioExterior11/ComercioExterior11.xslt",
+      "kind": "xslt",
+      "etag": "W/\"1ce58f58063c76a94fd59b528ef02751\"",
+      "lastModified": "Sat, 08 Aug 2020 05:19:26 GMT",
+      "sha256": "c96afd3f14e8c1802a653ffe71d7147f2f74eb4f5daf9e0b21afca0b2c80c7f7",
+      "size": 7293
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/ComercioExterior20/ComercioExterior20.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/ComercioExterior20/ComercioExterior20.xslt",
+      "kind": "xslt",
+      "etag": "W/\"50dacdf61c9dcaf068c9922fab4094fc\"",
+      "lastModified": "Tue, 16 Jan 2024 17:04:51 GMT",
+      "sha256": "b7540d6878c8d1e14b3d7f8a8bf3889dc03b0dfb6dfbfc6d6b30e27a094b8446",
+      "size": 7039
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/EstadoDeCuentaCombustible/ecc11.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/EstadoDeCuentaCombustible/ecc11.xslt",
+      "kind": "xslt",
+      "etag": "W/\"854f366a55922db163690bfdc93f1b42\"",
+      "lastModified": "Sat, 08 Aug 2020 05:19:27 GMT",
+      "sha256": "c6cb33abbf90eca69aa7d40bd8dabd193fb6b78ad5c0e32047dbc136a14dc239",
+      "size": 4243
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/EstadoDeCuentaCombustible/ecc12.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/EstadoDeCuentaCombustible/ecc12.xslt",
+      "kind": "xslt",
+      "etag": "W/\"b5ffe7200e692f55acd3fab3301c8661\"",
+      "lastModified": "Sat, 08 Aug 2020 05:19:29 GMT",
+      "sha256": "ad76f5a5c726df61fe82c1db5e3a189b1026fa0cd87518ea225498e24f4014fb",
+      "size": 4122
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/GastosHidrocarburos10/GastosHidrocarburos10.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/GastosHidrocarburos10/GastosHidrocarburos10.xslt",
+      "kind": "xslt",
+      "etag": "W/\"da1094fa55a06f70c2708d5685554e08\"",
+      "lastModified": "Sat, 08 Aug 2020 05:19:31 GMT",
+      "sha256": "dc295079d9884a2afec09d63819eb874b4bede35ca8d4fe713625d0973e78a6b",
+      "size": 5930
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/HidrocarburosPetro/hidrocarburospetroliferos.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/HidrocarburosPetro/hidrocarburospetroliferos.xslt",
+      "kind": "xslt",
+      "etag": "W/\"8f40a2a24790e9416850fa5733c85a16\"",
+      "lastModified": "Mon, 27 Apr 2026 18:13:05 GMT",
+      "sha256": "b212b9df8119de4278a24d5258b27ac295746b7476cc6aef969a3ad1d6c55a4b",
+      "size": 1208
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/IngresosHidrocarburos10/IngresosHidrocarburos.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/IngresosHidrocarburos10/IngresosHidrocarburos.xslt",
+      "kind": "xslt",
+      "etag": "W/\"b4fe40d45bfc2a01fa0726ffe00489df\"",
+      "lastModified": "Sat, 08 Aug 2020 05:19:34 GMT",
+      "sha256": "8dc9fb24cb47162da3d6fb831a1aa57a12571986eb123adfad2471370d56c10f",
+      "size": 1647
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/Pagos/Pagos10.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/Pagos/Pagos10.xslt",
+      "kind": "xslt",
+      "etag": "W/\"b7d0cd207915ddc29668755568ccfbd7\"",
+      "lastModified": "Sat, 08 Aug 2020 05:19:35 GMT",
+      "sha256": "473be05a204f8621666b2b670e2c53052b257dd0e61466d1d56cf96a4cddf927",
+      "size": 6119
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/Pagos/Pagos20.xsd": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/Pagos/Pagos20.xsd",
+      "kind": "xsd",
+      "etag": "W/\"e1a64cd5fd99dabeba3db5eb16fcc2a2\"",
+      "lastModified": "Sat, 07 Jan 2023 02:07:03 GMT",
+      "sha256": "f37dd303a490ecd1b53eff3b6498aa1be9c084afaf903908ca30e8d55c23d14a",
+      "size": 34039,
+      "deps": [
+        "http://www.sat.gob.mx/sitio_internet/cfd/catalogos/catCFDI.xsd",
+        "http://www.sat.gob.mx/sitio_internet/cfd/tipoDatos/tdCFDI/tdCFDI.xsd",
+        "http://www.sat.gob.mx/sitio_internet/cfd/catalogos/Pagos/catPagos.xsd"
+      ]
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/Pagos/Pagos20.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/Pagos/Pagos20.xslt",
+      "kind": "xslt",
+      "etag": "W/\"7f79776aaf1cac9c258418f3606c6fec\"",
+      "lastModified": "Wed, 05 Jan 2022 16:32:17 GMT",
+      "sha256": "9277a0a5049fbd56e3123e6489ffb16f6ccfbca30943aa7dbd0f969f3b70bd0f",
+      "size": 9827
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/TimbreFiscalDigital/TimbreFiscalDigitalv11.xsd": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/TimbreFiscalDigital/TimbreFiscalDigitalv11.xsd",
+      "kind": "xsd",
+      "etag": "W/\"c99516daa1f7751a07913b374aa65904\"",
+      "lastModified": "Sat, 08 Aug 2020 05:16:08 GMT",
+      "sha256": "fb3d061fe9914500bef8beb3ea2e8722ee8a8224fa3af63643877a64c0ea05f7",
+      "size": 4732,
+      "deps": [
+        "http://www.sat.gob.mx/sitio_internet/cfd/tipoDatos/tdCFDI/tdCFDI.xsd"
+      ]
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/TimbreFiscalDigital/cadenaoriginal_TFD_1_1.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/TimbreFiscalDigital/cadenaoriginal_TFD_1_1.xslt",
+      "kind": "xslt",
+      "etag": "W/\"dfd733aec0420b91dc0bb2215d7319cc\"",
+      "lastModified": "Sat, 08 Aug 2020 05:19:38 GMT",
+      "sha256": "d7807e936d5a768cec5dca7a35a8b6dd515287083ca9dd7424c1b722c4b0d5a6",
+      "size": 2340
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/TuristaPasajeroExtranjero/TuristaPasajeroExtranjero.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/TuristaPasajeroExtranjero/TuristaPasajeroExtranjero.xslt",
+      "kind": "xslt",
+      "etag": "W/\"a0b9f49cc95722b47bcfa42862e787e3\"",
+      "lastModified": "Sat, 08 Aug 2020 05:19:39 GMT",
+      "sha256": "5a65dd5bd8d340fdc547b92ff2797199a97674bf2c78feacb69186c91338a68b",
+      "size": 1931
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/aerolineas/aerolineas.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/aerolineas/aerolineas.xslt",
+      "kind": "xslt",
+      "etag": "W/\"7f0c2db3498b3a5552718581b834871d\"",
+      "lastModified": "Sat, 08 Aug 2020 05:19:44 GMT",
+      "sha256": "b197afab9535802b04d5e614a2320c10b8b67180e97f120b51d7bb60e61e028d",
+      "size": 1912
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/arteantiguedades/obrasarteantiguedades.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/arteantiguedades/obrasarteantiguedades.xslt",
+      "kind": "xslt",
+      "etag": "W/\"ec20340119f649304bbb736292f26bc2\"",
+      "lastModified": "Sat, 08 Aug 2020 05:19:46 GMT",
+      "sha256": "0823ab4e0ad86ffc6b674680981f4471a60c8ab72431b8dedacd08b1e61ba8e8",
+      "size": 1603
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/catalogos/CartaPorte/catCartaPorte.xsd": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/catalogos/CartaPorte/catCartaPorte.xsd",
+      "kind": "xsd",
+      "etag": "W/\"a382f511a928ed45546ff2b2efdf4853\"",
+      "lastModified": "Tue, 13 Jan 2026 16:55:44 GMT",
+      "sha256": "d2281b5fbe4149141324ba30aba983d0e6c6a619992b620d3a54644f03f66d12",
+      "size": 2459045
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/catalogos/ComExt/catComExt.xsd": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/catalogos/ComExt/catComExt.xsd",
+      "kind": "xsd",
+      "etag": "W/\"bf37215e31ae7983aa2f3285bb44a3be\"",
+      "lastModified": "Tue, 14 May 2024 00:24:07 GMT",
+      "sha256": "6c2d60cb8f92810db0fc82b83571d714244bc701b510d9fac4021c2b99dfcfbb",
+      "size": 1043746
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/catalogos/Pagos/catPagos.xsd": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/catalogos/Pagos/catPagos.xsd",
+      "kind": "xsd",
+      "etag": "\"b1256fa999474faa8dbaad443d52f553\"",
+      "lastModified": "Sat, 08 Aug 2020 05:16:21 GMT",
+      "sha256": "72dbaa6e3d6518ac26b1d6a03f44bf4280a4bf1e0361c926bdc714cd3db1dbd6",
+      "size": 533
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/catalogos/catCFDI.xsd": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/catalogos/catCFDI.xsd",
+      "kind": "xsd",
+      "etag": "W/\"e29ac5164fd253d5734a4d931127ecd2\"",
+      "lastModified": "Fri, 13 Dec 2024 19:59:34 GMT",
+      "sha256": "6c58936cb77576f839a4d7915953ceaf252b9eb9319f9458fe5bb67ae2bb0bb1",
+      "size": 5984046
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/certificadodestruccion/certificadodedestruccion.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/certificadodestruccion/certificadodedestruccion.xslt",
+      "kind": "xslt",
+      "etag": "W/\"64f1b00e93286a6fd5078a80b748b014\"",
+      "lastModified": "Sat, 08 Aug 2020 05:19:51 GMT",
+      "sha256": "e4b09099c1453b47bb286a69b05e60d5a5bccaaac466a4a2aebf788601f69349",
+      "size": 2882
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/cfdiregistrofiscal/cfdiregistrofiscal.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/cfdiregistrofiscal/cfdiregistrofiscal.xslt",
+      "kind": "xslt",
+      "etag": "\"a0d345d49e2ac3806b2310b834c7a631\"",
+      "lastModified": "Sat, 08 Aug 2020 05:19:54 GMT",
+      "sha256": "6f47783bfeafa3920cbb452a3adee0239efd2250c13b9d91d242930416d1dee2",
+      "size": 823
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/consumodecombustibles/consumodeCombustibles11.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/consumodecombustibles/consumodeCombustibles11.xslt",
+      "kind": "xslt",
+      "etag": "W/\"539ebe9f71f526668623e9b79e7d4ee2\"",
+      "lastModified": "Wed, 29 Dec 2021 01:38:47 GMT",
+      "sha256": "f43a77f25aba6ea7ce48769a5c700d2edce78e75914fbe866eafdb816ac2a9c1",
+      "size": 4192
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/consumodecombustibles/consumodecombustibles.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/consumodecombustibles/consumodecombustibles.xslt",
+      "kind": "xslt",
+      "etag": "W/\"73f66c5fddc566b582fa0fef429d2244\"",
+      "lastModified": "Wed, 29 Dec 2021 01:38:48 GMT",
+      "sha256": "1f7f204c2328765fb66daa6c0c322c47607eb607a2cad84452d132b3629b2c9b",
+      "size": 4353
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/detallista/detallista.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/detallista/detallista.xslt",
+      "kind": "xslt",
+      "etag": "W/\"549815efc82b814d641ca2c20a8c8406\"",
+      "lastModified": "Sat, 08 Aug 2020 05:19:59 GMT",
+      "sha256": "e09906ef78afc077aa3318ca87bf2469e8570f97299d2f0237a2bc81da1e5e12",
+      "size": 2176
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/divisas/divisas.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/divisas/divisas.xslt",
+      "kind": "xslt",
+      "etag": "\"e6bf920a490452c3e280599f7a23c92b\"",
+      "lastModified": "Sat, 08 Aug 2020 05:20:04 GMT",
+      "sha256": "64e24ea80b61f6a48ab242875e66877a49449286140187a668aa88241464640e",
+      "size": 707
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/donat/donat11.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/donat/donat11.xslt",
+      "kind": "xslt",
+      "etag": "\"257d43cbf4b823df0762c49d39675b8c\"",
+      "lastModified": "Sat, 08 Aug 2020 05:20:07 GMT",
+      "sha256": "608a65b07c5841857562026c244c81f9cf3ddd32ff1d28bebab347bb4230fee3",
+      "size": 994
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/iedu/iedu.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/iedu/iedu.xslt",
+      "kind": "xslt",
+      "etag": "W/\"4c41f1edfafe204c647ecc18ef92479a\"",
+      "lastModified": "Sat, 08 Aug 2020 05:20:15 GMT",
+      "sha256": "ef5e7e6cc0666cfc67d0c41ad865c2a044947289013ca2add0f89dea7fde667f",
+      "size": 1244
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/implocal/implocal.xsd": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/implocal/implocal.xsd",
+      "kind": "xsd",
+      "etag": "W/\"1ede849543abde4d74014fb9fb0c4915\"",
+      "lastModified": "Sat, 08 Aug 2020 05:16:36 GMT",
+      "sha256": "c377fe22b3d96cc6f719cbc4264c6d5754be351339deb48cfe7c004fefe62d1b",
+      "size": 4175
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/implocal/implocal.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/implocal/implocal.xslt",
+      "kind": "xslt",
+      "etag": "W/\"9b44984838d70bdda1c4af2968b511fd\"",
+      "lastModified": "Sat, 08 Aug 2020 05:20:15 GMT",
+      "sha256": "f99e91c983b7a43b72dc41129afca7342a30e6e45de71b34f7d4e5b6154439d4",
+      "size": 1827
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/ine/ine11.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/ine/ine11.xslt",
+      "kind": "xslt",
+      "etag": "W/\"ab39e084501e814d4a86c1404d7b66b9\"",
+      "lastModified": "Sat, 08 Aug 2020 05:20:25 GMT",
+      "sha256": "4098bf77bfee89e870604b7bc96ba4bdb19df78341f5e0cbffdd094eb916bcad",
+      "size": 1966
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/leyendasFiscales/leyendasFisc.xsd": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/leyendasFiscales/leyendasFisc.xsd",
+      "kind": "xsd",
+      "etag": "W/\"b7cead49faf02159e2108f07599c3e9d\"",
+      "lastModified": "Sat, 08 Aug 2020 05:16:40 GMT",
+      "sha256": "9ef0b6fbc63fae02c74f1c310242be0290196b6a1ff2eb7d337022bbaf97212c",
+      "size": 2785
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/leyendasFiscales/leyendasFisc.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/leyendasFiscales/leyendasFisc.xslt",
+      "kind": "xslt",
+      "etag": "W/\"b185cee8ab5580fa739f9bda65d801ff\"",
+      "lastModified": "Sat, 08 Aug 2020 05:20:26 GMT",
+      "sha256": "1588e059a3fdfc29bcca4de27f99dcf52abbaa7d815f428f2353a3105f52328c",
+      "size": 1410
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/nomina/nomina12.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/nomina/nomina12.xslt",
+      "kind": "xslt",
+      "etag": "W/\"8d9890d7942f57b18b961546bf9ce756\"",
+      "lastModified": "Sat, 08 Aug 2020 05:20:28 GMT",
+      "sha256": "4130bdb7f62d0987caa5af754ca0704c9e2693e3b454adfff02ba6146d673a08",
+      "size": 17105
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/notariospublicos/notariospublicos.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/notariospublicos/notariospublicos.xslt",
+      "kind": "xslt",
+      "etag": "W/\"eb0884c2fece797eb13820ef25a3dda8\"",
+      "lastModified": "Sat, 08 Aug 2020 05:20:31 GMT",
+      "sha256": "7d2609b4b2977ace634d022e83f49bb20534bf137d7bdba014a40ee4b85e1d21",
+      "size": 11323
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/pagoenespecie/pagoenespecie.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/pagoenespecie/pagoenespecie.xslt",
+      "kind": "xslt",
+      "etag": "W/\"29624b6c06f68b6a3f4069d9505a033b\"",
+      "lastModified": "Sat, 08 Aug 2020 05:20:32 GMT",
+      "sha256": "685854e25f091ebcb95a4865a7df80630949b2f400e47676ff8dfa2f3019a404",
+      "size": 1484
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/pfic/pfic.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/pfic/pfic.xslt",
+      "kind": "xslt",
+      "etag": "W/\"f891f6a72fd677723aaf7d0dfb1e31c8\"",
+      "lastModified": "Sat, 08 Aug 2020 05:20:33 GMT",
+      "sha256": "5f18f835cf6007e92b156ad4cc65ab9167becdcfb1742f6cd655fd2f173e8b1b",
+      "size": 1010
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/renovacionysustitucionvehiculos/renovacionysustitucionvehiculos.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/renovacionysustitucionvehiculos/renovacionysustitucionvehiculos.xslt",
+      "kind": "xslt",
+      "etag": "W/\"65dbc57768e72dc7b1f282f1a588344e\"",
+      "lastModified": "Sat, 08 Aug 2020 05:20:45 GMT",
+      "sha256": "1cda351ecbe8c4ddb4c6bb6508e7ea9c36b11627317870f04939765274979aba",
+      "size": 6777
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/servicioparcialconstruccion/servicioparcialconstruccion.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/servicioparcialconstruccion/servicioparcialconstruccion.xslt",
+      "kind": "xslt",
+      "etag": "W/\"9a7010fadaf10f014e993c1e3fa652de\"",
+      "lastModified": "Sat, 08 Aug 2020 05:20:46 GMT",
+      "sha256": "692f0470dd0fd57e4c6ea87012296b78d67c31b00c3120eaba446d29219b29e4",
+      "size": 2145
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/terceros/terceros11.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/terceros/terceros11.xslt",
+      "kind": "xslt",
+      "etag": "W/\"f083eac456dd5c0660fa78cc21f83353\"",
+      "lastModified": "Sat, 08 Aug 2020 05:20:50 GMT",
+      "sha256": "aa4ef4ae1851b4715785ad6440fc44f7bd5a58791d90ea3d0fdce1541dfe8e87",
+      "size": 4816
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/tipoDatos/tdCFDI/tdCFDI.xsd": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/tipoDatos/tdCFDI/tdCFDI.xsd",
+      "kind": "xsd",
+      "etag": "W/\"22ea0096f939b5b3b35c608c18da36b2\"",
+      "lastModified": "Tue, 04 Jun 2024 17:13:32 GMT",
+      "sha256": "b3b81fe4017b95d5477f23a32f47e8b0571683cfddfff1330508c75e02b504cd",
+      "size": 7315
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/valesdedespensa/valesdedespensa.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/valesdedespensa/valesdedespensa.xslt",
+      "kind": "xslt",
+      "etag": "W/\"8683390ec6de694caff163af8bf4ced3\"",
+      "lastModified": "Sat, 08 Aug 2020 05:20:52 GMT",
+      "sha256": "dff69b6c188c1332b6908936767050121571952a09b99f881c39e41773392b92",
+      "size": 2806
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/vehiculousado/vehiculousado.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/vehiculousado/vehiculousado.xslt",
+      "kind": "xslt",
+      "etag": "W/\"ffe8cff49c285f6dd9b995cc76dc52b8\"",
+      "lastModified": "Sat, 08 Aug 2020 05:20:55 GMT",
+      "sha256": "683b2a66cfd07d67f3c19c48499692e648079d663475f2f04f14d37131a29235",
+      "size": 3029
+    },
+    "www.sat.gob.mx/sitio_internet/cfd/ventavehiculos/ventavehiculos11.xslt": {
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/ventavehiculos/ventavehiculos11.xslt",
+      "kind": "xslt",
+      "etag": "W/\"fa8a891546b979e7de15bbeb4141f29e\"",
+      "lastModified": "Sat, 08 Aug 2020 05:20:57 GMT",
+      "sha256": "77a103915ea66d6ade5a23e5db7e3c66467abf744acef5f9ac8cafdc16362c7d",
+      "size": 1864
+    }
+  }
+}

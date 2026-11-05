@@ -15,8 +15,11 @@ CFDI agregando nodos y sellarlo, pero en **Go puro**, sin cgo, sin `ext-xsl` ni 
 - **Certificados y llaves privadas**: abre directamente los `.cer` y `.key` del SAT (CSD y
   e.firma) con su contraseña, firma, verifica, números de serie, RFC, nombre, vigencia
   ([certificados](docs/componentes/certificados.md)).
-- **Cadena original** en Go puro con los XSLT oficiales del SAT incluidos
+- **Cadena original** en Go puro con los XSLT oficiales del SAT
   ([cadena de origen](docs/componentes/cadena-de-origen.md)).
+- **XSLT y XSD del SAT siempre al día**: se descargan una vez, se revisan cada mes con el SAT y
+  cada versión nueva se verifica antes de usarse. También se puede forzar la actualización,
+  borrar la caché o trabajar sin internet ([recursos del SAT](docs/componentes/recursos-sat.md)).
 - **Consulta del estado de un CFDI en el SAT** (vigente, cancelado, cancelable, EFOS)
   ([estado SAT](docs/componentes/estado-sat.md)).
 - **Validación** de CFDI creados y recibidos: sello, certificado, timbre fiscal digital, esquemas
@@ -32,7 +35,9 @@ go get github.com/codigoaxaca/go-cfdi-utils
 ```
 
 Requiere Go 1.24 o superior. Opcionalmente `xmllint` para validar contra los esquemas XSD
-(ver [instalación](docs/instalacion.md)).
+(ver [instalación](docs/instalacion.md)). Los XSLT y XSD del SAT no van dentro del binario: se
+descargan la primera vez que se usan y se mantienen actualizados
+(ver [recursos del SAT](docs/componentes/recursos-sat.md)).
 
 ## Ejemplo rápido: crear y sellar un CFDI 4.0
 
@@ -121,21 +126,24 @@ fmt.Println(resp.Estado, resp.EsCancelable, resp.EstatusCancelacion) // Vigente 
 | [`cfdi40`](docs/crear/crear-cfdi-40.md) | Elementos, creador (`Creator`) y validador (`Validator`) de CFDI 4.0 |
 | [`credentials`](docs/componentes/certificados.md) | Certificados `.cer`, llaves `.key`, firma y verificación |
 | [`cadenaorigen`](docs/componentes/cadena-de-origen.md) | Cadena original con XSLT del SAT en Go puro |
+| [`satresources`](docs/componentes/recursos-sat.md) | XSLT y XSD del SAT: descarga, revisión mensual, verificación, respaldo sin internet |
+| [`cmd/cfdi-sat-resources`](docs/componentes/recursos-sat.md#comando-cfdi-sat-resources) | Comando para actualizar, consultar y borrar los recursos del SAT |
 | [`estadosat`](docs/componentes/estado-sat.md) | Consulta de estado de CFDI y texto del código QR |
 | [`validate`](docs/validar/validacion-cfdi-40.md), `validate/cfdi40validators` | Infraestructura y validadores |
 | [`complementos/...`](docs/crear/complementos.md) | Pagos 2.0, impuestos locales, leyendas fiscales, Carta Porte 3.1, TFD |
 | [`nodes`](docs/componentes/nodos.md) | Árbol de nodos XML (base de todo) |
 | [`sumasconceptos`](docs/utilerias/sumas-conceptos.md) | Cálculo de subtotal, impuestos y total |
 | [`cleaner`](docs/leer/limpieza-cfdi.md) | Limpieza de CFDI recibidos |
-| [`xmlresolver`](docs/componentes/xmlresolver.md) | Descarga y caché de recursos del SAT |
+| [`xmlresolver`](docs/componentes/xmlresolver.md) | Descarga y caché de los certificados del SAT |
 | [`xmlschema`](docs/validar/esquemas-xsd.md) | Validación XSD usando `xmllint` |
 
 ## Desarrollo
 
 ```shell
-go test ./...                                  # pruebas (sin red, salvo descargas en caché del SAT)
+go test ./...                                  # pruebas sin red (usan el respaldo incluido)
 CFDI_LIVE_TESTS=1 go test ./...                # incluye consultas reales al SAT
 go vet ./...
+go generate ./satresources/embedded            # actualiza el respaldo incluido desde el SAT
 ```
 
 ## Licencia
