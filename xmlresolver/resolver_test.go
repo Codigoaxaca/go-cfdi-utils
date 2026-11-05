@@ -1,0 +1,106 @@
+package xmlresolver
+
+import (
+	"context"
+	"net/http"
+	"net/http/httptest"
+	"os"
+	"path/filepath"
+	"strings"
+	"sync/atomic"
+	"testing"
+)
+
+func TestGetUsesCache(t *testing.T) {
+	var hits int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		atomic.AddInt32(&hits, 1)
+		_, _ = w.Write([]byte("contenido " + r.URL.Path))
+	}))
+	defer srv.Close()
+
+	r := NewWithLocalPath(t.TempDir())
+	for i := 0; i < 3; i++ {
+		data, err := r.Get(context.Background(), srv.URL+"/a/b.xsd")
+		if err != nil {
+			t.Fatal(err)
+		}
+		if string(data) != "contenido /a/b.xsd" {
+			t.Fatalf("contenido inesperado %q", data)
+		}
+	}
+	if hits != 1 {
+		t.Fatalf("se esperaba una descarga, hubo %d", hits)
+	}
+	local, _ := r.LocalFileFor(srv.URL + "/a/b.xsd")
+	if _, err := os.Stat(local); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestGetWithoutCacheAndErrors(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/404" {
+			http.NotFound(w, r)
+			return
+		}
+		_, _ = w.Write([]byte("ok"))
+	}))
+	defer srv.Close()
+	r := &Resolver{}
+	if r.HasLocalPath() {
+		t.Fatal("no debe tener caché")
+	}
+	if _, err := r.Get(context.Background(), srv.URL+"/x"); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := r.Get(context.Background(), srv.URL+"/404"); err == nil {
+		t.Fatal("se esperaba error")
+	}
+	if _, err := NewWithLocalPath(t.TempDir()).LocalFileFor("no-es-url"); err == nil {
+		t.Fatal("se esperaba error de URL")
+	}
+}
+
+func TestResolveSchemaRewritesImports(t *testing.T) {
+	mux := http.NewServeMux()
+	var base string
+	mux.HandleFunc("/main/main.xsd", func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"><xs:import namespace="urn:cat" schemaLocation="` + base + `/cat/cat.xsd"/><xs:include schemaLocation="types.xsd"/></xs:schema>`))
+	})
+	mux.HandleFunc("/main/types.xsd", func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"/>`))
+	})
+	mux.HandleFunc("/cat/cat.xsd", func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:cat"/>`))
+	})
+	srv := httptest.NewServer(mux)
+	defer srv.Close()
+	base = srv.URL
+
+	r := NewWithLocalPath(t.TempDir())
+	local, err := r.ResolveSchema(context.Background(), srv.URL+"/main/main.xsd")
+	if err != nil {
+		t.Fatal(err)
+	}
+	data, _ := os.ReadFile(local)
+	if strings.Contains(string(data), "127.0.0.1") || !strings.Contains(string(data), `schemaLocation="../cat/cat.xsd"`) || !strings.Contains(string(data), `schemaLocation="types.xsd"`) {
+		t.Fatalf("referencias no reescritas: %s", data)
+	}
+	if _, err := os.Stat(filepath.Join(filepath.Dir(local), "types.xsd")); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestSatCertificateLive(t *testing.T) {
+	if os.Getenv("CFDI_LIVE_TESTS") == "" {
+		t.Skip("define CFDI_LIVE_TESTS=1 para descargar del SAT")
+	}
+	cert, err := NewWithLocalPath(t.TempDir()).SatCertificate(context.Background(), "00001000000505211329")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if cert.NoCertificado() != "00001000000505211329" {
+		t.Fatalf("certificado inesperado %s", cert.NoCertificado())
+	}
+}

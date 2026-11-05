@@ -1,0 +1,8 @@
+<c:Comprobante xmlns:c="http://www.sat.gob.mx/cfd/4" xmlns:u="urn:unknown" Version="4.0" Serie="" Folio="  Árbol   ñ  &amp; &quot; &apos; &lt;  " Fecha="2026-01-01" NoCertificado="1" SubTotal="1" Moneda="MXN" Total="1" TipoDeComprobante="I" Exportacion="01" LugarExpedicion="12345">
+  <c:Emisor Rfc="AAA010101AAA" Nombre=" Niño&#9;  áéíóú&#10; Ruiz Sánchez " RegimenFiscal="601"/>
+  <c:Receptor Rfc="XAXX010101000" Nombre="Público" DomicilioFiscalReceptor="12345" RegimenFiscalReceptor="616" UsoCFDI="S01"/>
+  <c:Complemento>
+    <u:Unknown>texto desconocido <u:Child>hijo</u:Child></u:Unknown>
+  </c:Complemento>
+  <c:Addenda>NO DEBE APARECER<u:Child>secreto</u:Child></c:Addenda>
+</c:Comprobante>

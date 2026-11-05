@@ -1,0 +1,8 @@
+<cfdi:Comprobante xmlns:cfdi="http://www.sat.gob.mx/cfd/4" xmlns:i="http://www.sat.gob.mx/implocal" xmlns:l="http://www.sat.gob.mx/leyendasFiscales" xmlns:p="http://www.sat.gob.mx/Pagos20" xmlns:cp="http://www.sat.gob.mx/CartaPorte31" Version="4.0" Fecha="2026-01-01" NoCertificado="1" SubTotal="0" Moneda="XXX" Total="0" TipoDeComprobante="P" Exportacion="01" LugarExpedicion="12345">
+<cfdi:Complemento>
+<i:ImpuestosLocales version="1.0" TotaldeRetenciones="1" TotaldeTraslados="2"><i:RetencionesLocales ImpLocRetenido="local" TasadeRetencion="1" Importe="1"/><i:TrasladosLocales ImpLocTrasladado="otro" TasadeTraslado="2" Importe="2"/></i:ImpuestosLocales>
+<l:LeyendasFiscales version="1.0"><l:Leyenda disposicionFiscal="  artículo   ñ " norma="" textoLeyenda="Leyenda &amp; fiscal"/></l:LeyendasFiscales>
+<p:Pagos Version="2.0"><p:Totales MontoTotalPagos="100"/><p:Pago FechaPago="2026-01-01T00:00:00" FormaDePagoP="03" MonedaP="MXN" Monto="100"><p:DoctoRelacionado IdDocumento="uuid" MonedaDR="MXN" NumParcialidad="1" ImpSaldoAnt="100" ImpPagado="100" ImpSaldoInsoluto="0" ObjetoImpDR="01"/></p:Pago></p:Pagos>
+<cp:CartaPorte Version="3.1" IdCCP="CCC00000-0000-0000-0000-000000000000" TranspInternac="No" TotalDistRec="10"><cp:Ubicaciones><cp:Ubicacion TipoUbicacion="Origen" RFCRemitenteDestinatario="AAA010101AAA" FechaHoraSalidaLlegada="2026-01-01T00:00:00"><cp:Domicilio Estado="OAX" Pais="MEX" CodigoPostal="68000"/></cp:Ubicacion></cp:Ubicaciones><cp:Mercancias PesoBrutoTotal="1" UnidadPeso="KGM" NumTotalMercancias="1"><cp:Mercancia BienesTransp="10101500" Descripcion="Árbol" Cantidad="1" ClaveUnidad="H87" PesoEnKg="1"/></cp:Mercancias></cp:CartaPorte>
+</cfdi:Complemento>
+</cfdi:Comprobante>
