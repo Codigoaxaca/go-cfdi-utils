@@ -10,6 +10,8 @@ Si ya conoces `CfdiUtils` de PHP, esta tabla te ayuda a encontrar lo equivalente
 - `$node['Atributo']` es `node.Attr("Atributo")`; `$node['Atributo'] = 'x'` es `node.SetAttr("Atributo", "x")`.
 - Las excepciones son valores `error`.
 - Las operaciones que pueden usar la red reciben (o tienen una variante con) `context.Context`.
+- Los XML con `DOCTYPE` se rechazan al leerlos (`nodes.ErrDTDNotAllowed`), algo que la versión PHP
+  no hace. Consulta [Validación contra esquemas XSD](validar/esquemas-xsd.md#seguridad).
 
 ## Clases y paquetes
 

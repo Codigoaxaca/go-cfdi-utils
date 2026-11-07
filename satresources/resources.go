@@ -13,6 +13,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/codigoaxaca/go-cfdi-utils/internal/xmlsafe"
 	"github.com/codigoaxaca/go-cfdi-utils/internal/xslt"
 )
 
@@ -127,6 +128,9 @@ func detectKind(data []byte) (string, error) {
 			}
 			return "", fmt.Errorf("no es XML: %w", err)
 		}
+		if err := xmlsafe.CheckToken(t); err != nil {
+			return "", err
+		}
 		if se, ok := t.(xml.StartElement); ok {
 			switch {
 			case se.Name.Space == xslt.NS && (se.Name.Local == "stylesheet" || se.Name.Local == "transform"):
@@ -141,12 +145,15 @@ func detectKind(data []byte) (string, error) {
 
 func checkWellFormed(d *xml.Decoder) error {
 	for {
-		_, err := d.Token()
+		t, err := d.Token()
 		if err == io.EOF {
 			return nil
 		}
 		if err != nil {
 			return fmt.Errorf("XML mal formado: %w", err)
+		}
+		if err := xmlsafe.CheckToken(t); err != nil {
+			return err
 		}
 	}
 }

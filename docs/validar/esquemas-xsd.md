@@ -50,6 +50,34 @@ usan desde disco. Para no esperar en la primera factura, llama a
 Si `XSD01` falla, el resto de validaciones ya no se ejecutan (`MustStop`), porque un XML que no
 sigue la estructura puede producir resultados confusos.
 
+## Seguridad
+
+`xmllint` procesa el DTD del documento y abre los archivos que este indique, aun con `--nonet`. Un
+XML malicioso podría hacerle leer un archivo del servidor y sacar su contenido en el mensaje de
+error. Por eso, antes de ejecutarlo:
+
+- Se rechaza cualquier documento con `DOCTYPE` o con otra directiva como `<!ENTITY>`. El error se
+  puede identificar con `errors.Is(err, nodes.ErrDTDNotAllowed)`.
+- Se rechazan las declaraciones `<?xml ...?>` que no sigan el estándar o que Go y `xmllint` puedan
+  leer distinto, como `encoding = "UTF-7"`, que serviría para esconderle el DTD a Go. Las
+  declaraciones habituales se aceptan.
+
+`cfdi40.ReadXML`, `cfdi40.ValidateXML` y `nodes.ParseXML` aplican las mismas reglas y devuelven el
+error directamente.
+
+`xmllint` tiene además un tiempo límite, `xmlschema.DefaultTimeout` (un minuto), que no incluye la
+descarga de los esquemas. Se puede cambiar con el campo `Timeout`:
+
+```go
+v, err := xmlschema.NewXmllint(nil)
+if err != nil { /* ... */ }
+v.Timeout = 10 * time.Second
+```
+
+Si se agota el tiempo o se cancela el contexto, el error envuelve a `context.DeadlineExceeded` o
+`context.Canceled` y no es de tipo `*xmlschema.Error`, porque el documento no se llegó a validar.
+En ese caso `XSD01` queda en `ERROR`.
+
 ## Usar otro validador
 
 Cualquier tipo que implemente `validate.SchemaValidator` se puede usar:

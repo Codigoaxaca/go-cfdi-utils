@@ -218,7 +218,8 @@ binario.
 ## Qué verifica antes de activar una versión
 
 1. Que cada archivo sea XSLT o XSD bien formado. Un error del servidor que llegue como página
-   HTML se rechaza.
+   HTML se rechaza. También se rechaza cualquier archivo con `DOCTYPE`, porque `xmllint` procesaría
+   su DTD y podría abrir archivos locales.
 2. Que estén todos los archivos que se incluyen o importan.
 3. Que los XSLT compilen con el intérprete de la librería. El intérprete revisa todas las
    plantillas y rechaza cualquier instrucción, atributo o expresión XPath que no sepa interpretar,

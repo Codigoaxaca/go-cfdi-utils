@@ -81,6 +81,9 @@ err  = root.WriteFile("salida.xml")
 
 Advertencias:
 
+- Por seguridad, `ParseXML` rechaza los documentos con `DOCTYPE` (`nodes.ErrDTDNotAllowed`) y las
+  declaraciones `<?xml ...?>` fuera del estándar. Consulta
+  [Validación contra esquemas XSD](../validar/esquemas-xsd.md#seguridad).
 - Los nodos no son una reescritura fiel de DOM: solo contienen atributos, hijos y texto simple.
   Se pierden comentarios e instrucciones de procesamiento.
 - Los nombres se conservan tal como aparecen en el documento (con prefijo); no se resuelven

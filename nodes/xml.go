@@ -9,7 +9,14 @@ import (
 	"os"
 	"strings"
 	"unicode/utf8"
+
+	"github.com/codigoaxaca/go-cfdi-utils/internal/xmlsafe"
 )
+
+// ErrDTDNotAllowed indica que el documento contiene una declaración DOCTYPE o
+// alguna otra directiva. Un CFDI no las necesita y son la vía con la que un XML
+// puede pedirle a libxml2 (xmllint) que lea archivos locales.
+var ErrDTDNotAllowed = xmlsafe.ErrDTD
 
 // ParseXML convierte un contenido XML en una estructura de nodos.
 //
@@ -17,6 +24,10 @@ import (
 // documento (con su prefijo). Se ignoran comentarios e instrucciones de
 // procesamiento. El texto de un elemento solo se conserva cuando no es
 // únicamente espacio en blanco.
+//
+// Por seguridad se rechazan los documentos con DOCTYPE (ErrDTDNotAllowed) y las
+// declaraciones <?xml ...?> que no sigan el estándar o que otro lector de XML
+// pueda interpretar de forma distinta.
 func ParseXML(data []byte) (*Node, error) {
 	data = bytes.TrimPrefix(data, []byte("\xef\xbb\xbf")) // BOM UTF-8
 	dec := xml.NewDecoder(bytes.NewReader(data))
@@ -32,6 +43,9 @@ func ParseXML(data []byte) (*Node, error) {
 			break
 		}
 		if err != nil {
+			return nil, fmt.Errorf("nodes: XML inválido: %w", err)
+		}
+		if err := xmlsafe.CheckToken(tok); err != nil {
 			return nil, fmt.Errorf("nodes: XML inválido: %w", err)
 		}
 		switch t := tok.(type) {

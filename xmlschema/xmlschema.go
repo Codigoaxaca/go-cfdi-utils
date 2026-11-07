@@ -18,6 +18,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/codigoaxaca/go-cfdi-utils/nodes"
 	"github.com/codigoaxaca/go-cfdi-utils/satresources"
@@ -26,12 +27,28 @@ import (
 // ErrXmllintNotFound se devuelve cuando no se encuentra xmllint.
 var ErrXmllintNotFound = errors.New("xmlschema: no se encontró el ejecutable xmllint")
 
+// DefaultTimeout es lo que puede tardar xmllint en validar un documento si no
+// se indica otro límite. Una validación normal tarda menos de un segundo.
+const DefaultTimeout = time.Minute
+
 // XmllintValidator valida esquemas usando xmllint.
 type XmllintValidator struct {
 	// Resources obtiene los esquemas. Si es nil se usa satresources.Default().
 	Resources *satresources.Store
 	// Executable es la ruta de xmllint.
 	Executable string
+	// Timeout limita lo que puede tardar xmllint en cada validación; no
+	// incluye la descarga de los esquemas. Si es cero o negativo se usa
+	// DefaultTimeout. El contexto recibido al validar se respeta si termina
+	// antes.
+	Timeout time.Duration
+}
+
+func (v *XmllintValidator) timeout() time.Duration {
+	if v.Timeout > 0 {
+		return v.Timeout
+	}
+	return DefaultTimeout
 }
 
 // NewXmllint busca xmllint en el PATH y crea el validador. Si store es nil
@@ -67,6 +84,11 @@ func SchemaLocations(root *nodes.Node) []nodes.SchemaLocation {
 // Solo se usan los esquemas publicados en servidores permitidos por el
 // almacén (por omisión sat.gob.mx); las ubicaciones de otros servidores, como
 // las de algunas addendas, se ignoran.
+//
+// Los documentos con DOCTYPE se rechazan antes de ejecutar xmllint
+// (nodes.ErrDTDNotAllowed), porque xmllint abriría los archivos que indique el
+// DTD. Si xmllint no termina dentro del tiempo límite, el error envuelve a
+// context.DeadlineExceeded y no es de tipo *Error: el documento no se validó.
 func (v *XmllintValidator) ValidateSchemas(ctx context.Context, xml []byte) error {
 	store := v.Resources
 	if store == nil {
@@ -122,10 +144,18 @@ func (v *XmllintValidator) ValidateSchemas(ctx context.Context, xml []byte) erro
 		return err
 	}
 
-	cmd := exec.CommandContext(ctx, v.Executable, "--noout", "--nonet", "--schema", schemaFile, xmlFile)
+	runCtx, cancel := context.WithTimeout(ctx, v.timeout())
+	defer cancel()
+	cmd := exec.CommandContext(runCtx, v.Executable, "--noout", "--nonet", "--schema", schemaFile, xmlFile)
+	// Al terminar el proceso no se espera más de esto a sus procesos hijos, que
+	// podrían conservar abierta la salida de errores.
+	cmd.WaitDelay = time.Second
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
 	if err := cmd.Run(); err != nil {
+		if runCtx.Err() != nil {
+			return fmt.Errorf("xmlschema: xmllint no terminó: %w", runCtx.Err())
+		}
 		var exitErr *exec.ExitError
 		if errors.As(err, &exitErr) {
 			return &Error{Messages: cleanMessages(stderr.String(), xmlFile, schemaFile)}

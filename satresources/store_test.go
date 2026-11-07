@@ -2,6 +2,7 @@ package satresources_test
 
 import (
 	"context"
+	"encoding/base64"
 	"errors"
 	"io/fs"
 	"log/slog"
@@ -14,10 +15,13 @@ import (
 	"sync/atomic"
 	"testing"
 	"time"
+	"unicode/utf16"
 
 	"github.com/codigoaxaca/go-cfdi-utils/internal/testresources"
+	"github.com/codigoaxaca/go-cfdi-utils/internal/xmlsafe"
 	"github.com/codigoaxaca/go-cfdi-utils/satresources"
 	"github.com/codigoaxaca/go-cfdi-utils/satresources/embedded"
+	"github.com/codigoaxaca/go-cfdi-utils/xmlschema"
 )
 
 const (
@@ -202,6 +206,116 @@ func TestRefreshRejectsSchemaThatDoesNotCompile(t *testing.T) {
 	sat.Set(leyendaKey, []byte(broken))
 	if _, err := s.Refresh(ctx); !errors.Is(err, satresources.ErrVerification) {
 		t.Fatalf("se esperaba error de verificación, se obtuvo %v", err)
+	}
+}
+
+// insertBeforeRoot agrega contenido justo antes de la raíz de un recurso.
+func insertBeforeRoot(t *testing.T, data []byte, root, prolog string) []byte {
+	t.Helper()
+	out := strings.Replace(string(data), "<"+root, prolog+"<"+root, 1)
+	if out == string(data) {
+		t.Fatalf("no se encontró la raíz %s", root)
+	}
+	return []byte(out)
+}
+
+func utf7(s string) string {
+	var raw []byte
+	for _, u := range utf16.Encode([]rune(s)) {
+		raw = append(raw, byte(u>>8), byte(u))
+	}
+	return "+" + base64.RawStdEncoding.EncodeToString(raw) + "-"
+}
+
+// Un recurso descargado con DTD no se activa: xmllint procesaría ese DTD al
+// compilar el esquema y en cada validación. El DTD de la prueba no pide ningún
+// archivo y el esquema compila: lo que debe rechazarlo es la verificación.
+func TestRefreshRejectsResourceWithDTD(t *testing.T) {
+	t.Parallel()
+	for name, tc := range map[string]struct{ key, root string }{
+		"xsd":  {leyendaKey, "xs:schema"},
+		"xslt": {pagosKey, "xsl:stylesheet"},
+	} {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			sat := testresources.NewFakeSAT()
+			s := newStore(t, sat, satresources.Config{})
+			if err := s.Prepare(ctx); err != nil {
+				t.Fatal(err)
+			}
+			old := s.Version()
+			sat.Set(tc.key, insertBeforeRoot(t, sat.Get(tc.key), tc.root, `<!DOCTYPE `+tc.root+`>`))
+			if _, err := s.Refresh(ctx); !errors.Is(err, xmlsafe.ErrDTD) {
+				t.Fatalf("se esperaba xmlsafe.ErrDTD, se obtuvo %v", err)
+			}
+			if s.Version() != old {
+				t.Fatal("no se debió activar otra versión")
+			}
+		})
+	}
+}
+
+// Un DTD escondido en UTF-7 y uno dentro del esquema tampoco se aceptan.
+func TestRefreshRejectsResourceHidingDTD(t *testing.T) {
+	t.Parallel()
+	dtd := `<!DOCTYPE xs:schema>`
+	for name, tc := range map[string]struct {
+		change func(xsd string) string
+		want   error
+	}{
+		"utf7 con espacios": {func(xsd string) string {
+			_, body, _ := strings.Cut(xsd, "?>")
+			return `<?xml version="1.0" encoding = "UTF-7"?>` + utf7(dtd) + body
+		}, xmlsafe.ErrDeclaration},
+		"directiva dentro de la raíz": {func(xsd string) string {
+			return strings.Replace(xsd, `</xs:schema>`, `<!ENTITY x "y"></xs:schema>`, 1)
+		}, xmlsafe.ErrDTD},
+	} {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			sat := testresources.NewFakeSAT()
+			s := newStore(t, sat, satresources.Config{})
+			if err := s.Prepare(ctx); err != nil {
+				t.Fatal(err)
+			}
+			old := s.Version()
+			sat.Set(leyendaKey, []byte(tc.change(string(sat.Get(leyendaKey)))))
+			if _, err := s.Refresh(ctx); !errors.Is(err, tc.want) {
+				t.Fatalf("se esperaba %v, se obtuvo %v", tc.want, err)
+			}
+			if s.Version() != old {
+				t.Fatal("no se debió activar otra versión")
+			}
+		})
+	}
+}
+
+func TestSchemaWithDTDCannotReadFiles(t *testing.T) {
+	t.Parallel()
+	if _, err := exec.LookPath("xmllint"); err != nil {
+		t.Skip("xmllint no está instalado")
+	}
+	secret := filepath.Join(t.TempDir(), "secreto.env")
+	if err := os.WriteFile(secret, []byte("DB_PASSWORD=hunter2-SECRETO\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	sat := testresources.NewFakeSAT()
+	sat.Set(cfdv40Key, insertBeforeRoot(t, sat.Get(cfdv40Key), "xs:schema", `<!DOCTYPE xs:schema [<!ENTITY % x SYSTEM "file://`+secret+`"> %x;]>`))
+	s := newStore(t, sat, satresources.Config{})
+	v, err := xmlschema.NewXmllint(s)
+	if err != nil {
+		t.Fatal(err)
+	}
+	doc, err := os.ReadFile("../testdata/cfdi/cfdi40-real.xml")
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = v.ValidateSchemas(ctx, doc)
+	if err == nil {
+		t.Fatal("se esperaba un error por el esquema con DTD")
+	}
+	if strings.Contains(err.Error(), "hunter2") {
+		t.Fatalf("se filtró el contenido del archivo: %v", err)
 	}
 }
 
